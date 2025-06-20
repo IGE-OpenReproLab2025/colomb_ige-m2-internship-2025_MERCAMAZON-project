@@ -1,0 +1,315 @@
+---
+title: "Evol_mass_mercury_2014_2015_20_06_2025"
+author: "Martin Colomb"
+date: "`r Sys.Date()`"
+version: "R-4.4.2"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Chargement des packages
+
+```{r packages}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(ncdf4)
+library(stringr)
+library(tibble)
+library(writexl)
+
+
+```
+
+# Lecture des données
+
+```{r cell-area}
+chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
+statemet<-nc_open(file.path(chem_hist, "GEOSChem.StateMet.2014_2015_m.nc4"))
+
+Met_AIRVOL<-ncvar_get(statemet, "Met_AIRVOL")  #Met_AIRVOL (Volume of grid box m3)
+Met_AIRDEN<-ncvar_get(statemet, "Met_AIRDEN")  #Met_AIRDEN (Dry air density kg m-3)
+Met_AD<-ncvar_get(statemet, "Met_AD")  #Met_AD (Dry air mass kg)
+mean_Met_AD <- apply(Met_AD, c(1,2,3), mean, na.rm = TRUE)
+
+
+s_in_yr = 365.2425 * 24 * 3600
+unit_conv = s_in_yr
+kg_Mg = 1e-3
+MW_Hg = 200.59
+avo = 6.02e23
+g_kg = 1e-3
+cm2_m2 = 1e4
+M_Hg <- 0.20059
+M_air <- 0.028964
+```
+
+# The conversion formula is:
+
+```         
+    mol species                g/mol species
+    ----------- * kg dry air * -------------
+    mol dry air                g/mol dry air
+
+    = volume mixing ratio * dry air mass * MW species / MW dry air
+
+    = kg species
+    
+        
+    MW dry air is defined as 28.9644 g/mol
+    https://github.com/geoschem/geos-chem/blob/4722f288e90291ba904222f4bbe4fc216d17c34a/Headers/physconstants.F90#L26
+
+    
+    
+```
+
+```{r plot Hg total mensuel, echo=TRUE}
+
+# Trouver les sous-dossiers de simulation
+subdirs <- list.dirs(chem_hist, recursive = FALSE, full.names = TRUE)
+subdirs <- subdirs[grepl("HIST_", basename(subdirs))]
+
+# Initialiser le tibble résultat
+results_mass_Hg_total <- tibble()
+
+# Boucle sur chaque simulation
+for (subdir in subdirs) {
+  
+  # Trouver tous les fichiers mensuels SpeciesConc dans la simulation
+  chem_files <- list.files(subdir, pattern = "GEOSChem.SpeciesConc.*\\.nc4$", full.names = TRUE)
+  chem_files <- chem_files[!grepl("_m\\.nc4$", chem_files)]  # exclure le fichier annuel si présent
+
+  for (file in chem_files) {
+    nc <- nc_open(file)
+    
+    # Sélectionner toutes les variables contenant "Hg"
+    hg_vars <- names(nc$var)
+    hg_vars <- hg_vars[grepl("Hg", hg_vars)]
+    
+    # Somme des espèces de mercure
+    Hg_total <- ncvar_get(nc, hg_vars[1])
+    if (length(hg_vars) > 1) {
+      for (varname in hg_vars[-1]) {
+        Hg_total <- Hg_total + ncvar_get(nc, varname)
+      }
+    }
+    nc_close(nc)
+    
+    # Calcul masse (kg) puis conversion en tonnes
+    mass_Hg_total <- Hg_total * mean_Met_AD * (M_Hg / M_air)
+    total_mass_Hg_tonnes <- sum(mass_Hg_total, na.rm = TRUE) / 1000
+    
+    # Extraire date depuis nom fichier
+    file_date <- str_extract(basename(file), "\\d{8}")
+    file_date <- as.Date(file_date, format = "%Y%m%d")
+    
+    # Stocker le résultat
+    results_mass_Hg_total <- bind_rows(results_mass_Hg_total, tibble(
+      case = basename(subdir),
+      date = file_date,
+      total_Hg_mass_tonnes = total_mass_Hg_tonnes
+    ))
+  }
+}
+
+# Résultat trié dans l’ordre temporel
+results_mass_Hg_total <- results_mass_Hg_total %>% arrange(case, date)
+results_mass_hg_total_NA<-na.omit(results_mass_Hg_total)
+print(results_mass_hg_total_NA)
+
+
+
+
+
+ggplot(results_mass_hg_total_NA, aes(x = date, y = total_Hg_mass_tonnes, color = case)) +
+  geom_line(size = 1.1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Évolution mensuelle de la masse totale de mercure (Hg) dans l’atmosphère",
+    x = "Date",
+    y = "Masse totale de Hg⁰ (tonnes)"
+  ) +
+  annotate("text", x = as.Date("2014-06-01"), y = 3500, label = "Spinup", size = 5, fontface = "italic")+
+  scale_x_date(
+    date_breaks = "2 months",
+    date_labels = "%Y-%m"
+  ) +
+  geom_vline(xintercept = as.Date("2015-01-01"), color = "red", linetype = "dashed", linewidth = 1)+
+  theme_classic(base_size = 14) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
+  )
+
+
+
+```
+```{r plot Hg0 total mensuel, echo=TRUE}
+
+results_mass_Hg0 <- tibble()
+
+for (subdir in subdirs) {
+  chem_files <- list.files(subdir, pattern = "GEOSChem.SpeciesConc.*\\.nc4$", full.names = TRUE)
+  chem_files <- chem_files[!grepl("_m\\.nc4$", chem_files)]
+
+  for (file in chem_files) {
+    nc <- nc_open(file)
+
+    # Charger uniquement Hg⁰
+    if (!"SpeciesConcVV_Hg0" %in% names(nc$var)) {
+      nc_close(nc)
+      next
+    }
+
+    Hg0 <- ncvar_get(nc, "SpeciesConcVV_Hg0")
+    nc_close(nc)
+
+    # Calcul masse (kg) puis conversion en tonnes
+    mass_Hg0 <- Hg0 * mean_Met_AD * (M_Hg / M_air)
+    total_mass_Hg0_tonnes <- sum(mass_Hg0, na.rm = TRUE) / 1000
+
+    file_date <- str_extract(basename(file), "\\d{8}")
+    file_date <- as.Date(file_date, format = "%Y%m%d")
+
+    results_mass_Hg0 <- bind_rows(results_mass_Hg0, tibble(
+      case = basename(subdir),
+      date = file_date,
+      total_Hg0_mass_tonnes = total_mass_Hg0_tonnes
+    ))
+  }
+}
+
+results_mass_Hg0 <- results_mass_Hg0 %>% arrange(case, date)
+
+
+
+ggplot(results_mass_Hg0, aes(x = date, y = total_Hg0_mass_tonnes, color = case)) +
+  geom_line(size = 1.1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Évolution mensuelle de la masse de Hg⁰ dans l’atmosphère",
+    x = "Date",
+    y = "Masse totale de Hg⁰ (tonnes)"
+  ) +
+  annotate("text", x = as.Date("2014-06-01"), y = 3500, label = "Spinup", size = 5, fontface = "italic")+
+  scale_x_date(
+    date_breaks = "2 months",
+    date_labels = "%Y-%m"
+  ) +
+  geom_vline(xintercept = as.Date("2015-01-01"), color = "red", linetype = "dashed", linewidth = 1)+
+  theme_classic(base_size = 14) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
+  )
+
+
+```
+
+
+```{r plot HgII total mensuel, echo=TRUE}
+
+results_mass_Hg2 <- tibble()
+
+for (subdir in subdirs) {
+  chem_files <- list.files(subdir, pattern = "GEOSChem.SpeciesConc.*\\.nc4$", full.names = TRUE)
+  chem_files <- chem_files[!grepl("_m\\.nc4$", chem_files)]
+
+  for (file in chem_files) {
+    nc <- nc_open(file)
+
+    hg_vars <- names(nc$var)
+    hg_vars <- hg_vars[grepl("Hg", hg_vars)]
+
+    if (!"SpeciesConcVV_Hg0" %in% hg_vars) {
+      nc_close(nc)
+      next
+    }
+
+    Hg0 <- ncvar_get(nc, "SpeciesConcVV_Hg0")
+
+    # Somme des autres espèces Hg (Hg2)
+    hg_vars_2 <- setdiff(hg_vars, "SpeciesConcVV_Hg0")
+    if (length(hg_vars_2) == 0) {
+      nc_close(nc)
+      next
+    }
+
+    Hg_2 <- ncvar_get(nc, hg_vars_2[1])
+    if (length(hg_vars_2) > 1) {
+      for (varname in hg_vars_2[-1]) {
+        Hg_2 <- Hg_2 + ncvar_get(nc, varname)
+      }
+    }
+    nc_close(nc)
+
+    # Calcul masse (kg) puis conversion en tonnes
+    mass_Hg_2 <- Hg_2 * mean_Met_AD * (M_Hg / M_air)
+    total_mass_Hg_2_tonnes <- sum(mass_Hg_2, na.rm = TRUE) / 1000
+
+    file_date <- str_extract(basename(file), "\\d{8}")
+    file_date <- as.Date(file_date, format = "%Y%m%d")
+
+    results_mass_Hg2 <- bind_rows(results_mass_Hg2, tibble(
+      case = basename(subdir),
+      date = file_date,
+      total_Hg2_mass_tonnes = total_mass_Hg_2_tonnes
+    ))
+  }
+}
+
+results_mass_Hg2 <- results_mass_Hg2 %>% arrange(case, date)
+print(results_mass_Hg2)
+
+ggplot(results_mass_Hg2, aes(x = date, y = total_Hg2_mass_tonnes, color = case)) +
+  geom_line(size = 1.1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Évolution mensuelle de la masse de Hg² (Hg total - Hg⁰) dans l’atmosphère",
+    x = "Date",
+    y = "Masse de Hg² (tonnes)",
+    color = "Simulation"
+  ) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y-%m") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+ggplot(results_mass_Hg2, aes(x = date, y = total_Hg2_mass_tonnes, color = case)) +
+  geom_line(size = 1.1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Évolution mensuelle de la masse de Hg² (Hg total - Hg⁰) dans l’atmosphère",
+    x = "Date",
+    y = "Masse totale de Hg⁰ (tonnes)"
+  ) +
+  annotate("text", x = as.Date("2014-06-01"), y = 100, label = "Spinup", size = 5, fontface = "italic")+
+  scale_x_date(
+    date_breaks = "2 months",
+    date_labels = "%Y-%m"
+  ) +
+  geom_vline(xintercept = as.Date("2015-01-01"), color = "red", linetype = "dashed", linewidth = 1)+
+  theme_classic(base_size = 14) +
+  theme(
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
+  )
+
+
+
+```
