@@ -1,11 +1,24 @@
-Evol_mass_mercury_2014_2015_20_06_2025
-================
-Martin Colomb
-2025-06-20
+---
+title: "Evol_mass_mercury_2014_2015_20_06_2025"
+author: "Martin Colomb"
+date: "`r Sys.Date()`"
+version: "R-4.4.2"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
 
 # Chargement des packages
 
-``` r
+```{r packages}
 library(dplyr)
 library(ggplot2)
 library(lubridate)
@@ -13,11 +26,13 @@ library(ncdf4)
 library(stringr)
 library(tibble)
 library(writexl)
+
+
 ```
 
 # Lecture des données
 
-``` r
+```{r cell-area}
 chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
 statemet<-nc_open(file.path(chem_hist, "GEOSChem.StateMet.2014_2015_m.nc4"))
 
@@ -40,26 +55,28 @@ M_air <- 0.028964
 
 # The conversion formula is:
 
-        mol species                g/mol species
-        ----------- * kg dry air * -------------
-        mol dry air                g/mol dry air
+```         
+    mol species                g/mol species
+    ----------- * kg dry air * -------------
+    mol dry air                g/mol dry air
 
-        = volume mixing ratio * dry air mass * MW species / MW dry air
+    = volume mixing ratio * dry air mass * MW species / MW dry air
 
-        = kg species
+    = kg species
+    
         
-            
-        MW dry air is defined as 28.9644 g/mol
-        https://github.com/geoschem/geos-chem/blob/4722f288e90291ba904222f4bbe4fc216d17c34a/Headers/physconstants.F90#L26
+    MW dry air is defined as 28.9644 g/mol
+    https://github.com/geoschem/geos-chem/blob/4722f288e90291ba904222f4bbe4fc216d17c34a/Headers/physconstants.F90#L26
 
-        
-        
+    
+    
+```
 
-``` r
+```{r plot Hg total mensuel, echo=TRUE}
+
 # Trouver les sous-dossiers de simulation
 subdirs <- list.dirs(chem_hist, recursive = FALSE, full.names = TRUE)
 subdirs <- subdirs[grepl("HIST_", basename(subdirs))]
-
 # Initialiser le tibble résultat
 results_mass_Hg_total <- tibble()
 
@@ -107,24 +124,11 @@ for (subdir in subdirs) {
 results_mass_Hg_total <- results_mass_Hg_total %>% arrange(case, date)
 results_mass_hg_total_NA<-na.omit(results_mass_Hg_total)
 print(results_mass_hg_total_NA)
-```
 
-    ## # A tibble: 191 × 3
-    ##    case     date       total_Hg_mass_tonnes
-    ##    <chr>    <date>                    <dbl>
-    ##  1 HIST_B10 2014-01-01                 327.
-    ##  2 HIST_B10 2014-02-01                 858.
-    ##  3 HIST_B10 2014-03-01                1300.
-    ##  4 HIST_B10 2014-04-01                1691.
-    ##  5 HIST_B10 2014-05-01                2033.
-    ##  6 HIST_B10 2014-06-01                2352.
-    ##  7 HIST_B10 2014-07-01                2619.
-    ##  8 HIST_B10 2014-08-01                2843.
-    ##  9 HIST_B10 2014-09-01                2998.
-    ## 10 HIST_B10 2014-10-01                3125.
-    ## # ℹ 181 more rows
 
-``` r
+
+
+
 ggplot(results_mass_hg_total_NA, aes(x = date, y = total_Hg_mass_tonnes, color = case)) +
   geom_line(size = 1.1) +
   geom_point(size = 2) +
@@ -146,11 +150,13 @@ ggplot(results_mass_hg_total_NA, aes(x = date, y = total_Hg_mass_tonnes, color =
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
   )
+
+
+
 ```
 
-![](Evol_mass_mercury_2014_2015_20_06_2025_files/figure-gfm/plot%20Hg%20total%20mensuel-1.png)<!-- -->
+```{r plot Hg0 total mensuel, echo=TRUE}
 
-``` r
 results_mass_Hg0 <- tibble()
 
 for (subdir in subdirs) {
@@ -192,7 +198,7 @@ ggplot(results_mass_Hg0, aes(x = date, y = total_Hg0_mass_tonnes, color = case))
   geom_line(size = 1.1) +
   geom_point(size = 2) +
   labs(
-    title = "Évolution mensuelle de la masse de Hg⁰ dans l’atmosphère",
+    title = "Hg⁰ mass evolution in atmosphere",
     x = "Date",
     y = "Masse totale de Hg⁰ (tonnes)"
   ) +
@@ -209,11 +215,12 @@ ggplot(results_mass_Hg0, aes(x = date, y = total_Hg0_mass_tonnes, color = case))
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
   )
+
+
 ```
 
-![](Evol_mass_mercury_2014_2015_20_06_2025_files/figure-gfm/plot%20Hg0%20total%20mensuel-1.png)<!-- -->
+```{r plot HgII total mensuel, echo=TRUE}
 
-``` r
 results_mass_Hg2 <- tibble()
 
 for (subdir in subdirs) {
@@ -265,29 +272,14 @@ for (subdir in subdirs) {
 
 results_mass_Hg2 <- results_mass_Hg2 %>% arrange(case, date)
 print(results_mass_Hg2)
-```
 
-    ## # A tibble: 191 × 3
-    ##    case     date       total_Hg2_mass_tonnes
-    ##    <chr>    <date>                     <dbl>
-    ##  1 HIST_B10 2014-01-01                  5.04
-    ##  2 HIST_B10 2014-02-01                 16.7 
-    ##  3 HIST_B10 2014-03-01                 26.0 
-    ##  4 HIST_B10 2014-04-01                 32.7 
-    ##  5 HIST_B10 2014-05-01                 38.3 
-    ##  6 HIST_B10 2014-06-01                 45.7 
-    ##  7 HIST_B10 2014-07-01                 54.6 
-    ##  8 HIST_B10 2014-08-01                 62.7 
-    ##  9 HIST_B10 2014-09-01                 73.1 
-    ## 10 HIST_B10 2014-10-01                 84.6 
-    ## # ℹ 181 more rows
 
-``` r
+
 ggplot(results_mass_Hg2, aes(x = date, y = total_Hg2_mass_tonnes, color = case)) +
   geom_line(size = 1.1) +
   geom_point(size = 2) +
   labs(
-    title = "Évolution mensuelle de la masse de Hg² (Hg total - Hg⁰) dans l’atmosphère",
+    title = "Hg² mass evolution (Hg total - Hg⁰) in atmosphere",
     x = "Date",
     y = "Masse totale de Hg⁰ (tonnes)"
   ) +
@@ -304,6 +296,7 @@ ggplot(results_mass_Hg2, aes(x = date, y = total_Hg2_mass_tonnes, color = case))
     axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
   )
-```
 
-![](Evol_mass_mercury_2014_2015_20_06_2025_files/figure-gfm/plot%20HgII%20total%20mensuel-1.png)<!-- -->
+
+
+```

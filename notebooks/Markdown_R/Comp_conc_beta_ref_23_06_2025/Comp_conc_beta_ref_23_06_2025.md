@@ -1,38 +1,24 @@
 Comparaison modèle vs. observations Hg0
 ================
 Martin Colomb
-2025-06-13
+2025-07-02
 
 # Chargement des packages
 
 ``` r
-library(akima)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(ncdf4)
-library(plotly)
-library(RColorBrewer)
-library(raster)
-library(reshape2)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(scales)
-library(sf)
-library(terra)
-library(viridis)
-library(zoo)
 library(patchwork)
-library(maps)
 library(geosphere)
-library(tidyverse)
 ```
 
 # Lecture des données de surface de cellule
 
 ``` r
-setwd("C:/Users/colom/Desktop/STAGE/data/clean_mod_data/")
-gboxarea <- nc_open("GEOSChem_2x25_gboxarea.nc")
+chem<-("C:/Users/colom/Desktop/STAGE/data/clean_mod_data/")
+gboxarea <- nc_open(file.path(chem, "GEOSChem_2x25_gboxarea.nc"))
 area <- ncvar_get(gboxarea, "cell_area")
 ```
 
@@ -124,12 +110,12 @@ plot_comparaison(ref_hg0_1_hemiN, "Comparaison Hémisphère Nord") +
   plot_layout(nrow = 2)
 ```
 
-![](Comp_conc_beta_ref_13_06_2025_files/figure-gfm/comparaison-plot-1.png)<!-- -->
+![](Comp_conc_beta_ref_23_06_2025_files/figure-gfm/comparaison-plot-1.png)<!-- -->
 
 # Comparaison multi-scénarios
 
 ``` r
-scenarios <- c("B10",  "B20",  "B30", "B40", "V3")
+scenarios <- c("V3","V3_3y" ,"B10",  "B20",  "B30", "B40", "B100", "B150", "B200" )
 chem_base <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_"
 all_results <- data.frame()
 
@@ -160,16 +146,20 @@ for (sc in scenarios) {
 }
 ```
 
+    ## Traitement du scénario : V3 
+    ## Traitement du scénario : V3_3y 
     ## Traitement du scénario : B10 
     ## Traitement du scénario : B20 
     ## Traitement du scénario : B30 
     ## Traitement du scénario : B40 
-    ## Traitement du scénario : V3
+    ## Traitement du scénario : B100 
+    ## Traitement du scénario : B150 
+    ## Traitement du scénario : B200
 
 ``` r
 res_N <- all_results %>% filter(Lat > 0)
 res_S <- all_results %>% filter(Lat < 0)
-palette_b <- c("B10" = "#52e3e1" ,"B20" = "#fdf148" , "B30" ="#d883ff" , "B40" ="#9336fd", "V3" = "black" )
+palette_b <- c("V3" = "black","V3_3y" = "red","B10" = "#52e3e1" ,"B20" = "#fdf148" , "B30" ="#d883ff" , "B40" ="#9336fd", "B100" = "#33a8c7" , "B150" = "#ffab00", "B200" = "#a0e426" )
 
 plot_multi <- function(df, title) {
   ggplot(df, aes(x = Hg0, y = conc_model, color = scenario)) +
@@ -191,4 +181,4 @@ plot_multi(res_N, "Modèle vs obs - Nord") +
   plot_layout(nrow = 2)
 ```
 
-![](Comp_conc_beta_ref_13_06_2025_files/figure-gfm/multi-scenario-1.png)<!-- -->
+![](Comp_conc_beta_ref_23_06_2025_files/figure-gfm/multi-scenario-1.png)<!-- -->

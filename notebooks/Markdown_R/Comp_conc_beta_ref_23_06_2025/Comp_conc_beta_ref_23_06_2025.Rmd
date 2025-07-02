@@ -1,44 +1,42 @@
-Comparaison modèle vs. observations Hg0
-================
-Martin Colomb
-2025-06-16
+---
+title: "Comparaison modèle vs. observations Hg0"
+author: "Martin Colomb"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
 
 # Chargement des packages
 
-``` r
-library(akima)
+```{r packages}
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(ncdf4)
-library(plotly)
-library(RColorBrewer)
-library(raster)
-library(reshape2)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(scales)
-library(sf)
-library(terra)
-library(viridis)
-library(zoo)
 library(patchwork)
-library(maps)
 library(geosphere)
-library(tidyverse)
 ```
 
 # Lecture des données de surface de cellule
 
-``` r
-setwd("C:/Users/colom/Desktop/STAGE/data/clean_mod_data/")
-gboxarea <- nc_open("GEOSChem_2x25_gboxarea.nc")
+```{r cell-area}
+chem<-("C:/Users/colom/Desktop/STAGE/data/clean_mod_data/")
+gboxarea <- nc_open(file.path(chem, "GEOSChem_2x25_gboxarea.nc"))
 area <- ncvar_get(gboxarea, "cell_area")
 ```
 
 # Constantes et conversion
 
-``` r
+```{r constants}
 s_in_yr = 365.2425 * 24 * 3600
 MW_Hg = 200.59
 avo = 6.02e23
@@ -53,7 +51,7 @@ T <- 298.15
 
 # Concentrations - scénario B25
 
-``` r
+```{r b25-data}
 chem_B25 <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B25"
 species_conc_B25 <- nc_open(file.path(chem_B25, "GEOSChem.SpeciesConc.2015_m.nc4"))
 conc_hg0_B25 <- ncvar_get(species_conc_B25, "SpeciesConcVV_Hg0")
@@ -73,7 +71,7 @@ df_mrtn_B25 <- expand.grid(lon = lon, lat = lat) %>% mutate(conc = as.vector(con
 
 # Lecture des observations
 
-``` r
+```{r observations}
 chem_ref <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/ref_wd_con_hg"
 ref_hg0_1 <- read.csv2(file.path(chem_ref, "Hg0_annual_2013-2015_Apr13_2024.csv"), sep = ",", header = TRUE)
 colnames(ref_hg0_1) <- as.character(unlist(ref_hg0_1[1, ]))
@@ -86,7 +84,7 @@ ref_hg0_1$Hg0 <- as.numeric(ref_hg0_1$Hg0)
 
 # Attribution concentration modélisée aux stations
 
-``` r
+```{r nearest-conc}
 get_nearest_conc <- function(station_lon, station_lat, grid_df) {
   candidates <- grid_df %>% filter(abs(lon - station_lon) < 2, abs(lat - station_lat) < 2)
   if (nrow(candidates) == 0) return(NA)
@@ -102,7 +100,7 @@ ref_hg0_1$conc_model_mrtn <- mapply(get_nearest_conc, ref_hg0_1$Lon, ref_hg0_1$L
 
 # Comparaison graphique - Hémisphères
 
-``` r
+```{r comparaison-plot, echo=TRUE}
 ref_hg0_1_hemiN <- ref_hg0_1[ref_hg0_1$Lat > 0, ]
 ref_hg0_1_hemiS <- ref_hg0_1[ref_hg0_1$Lat < 0, ]
 
@@ -124,12 +122,10 @@ plot_comparaison(ref_hg0_1_hemiN, "Comparaison Hémisphère Nord") +
   plot_layout(nrow = 2)
 ```
 
-![](Comp_conc_beta_ref_16_06_2025_files/figure-gfm/comparaison-plot-1.png)<!-- -->
-
 # Comparaison multi-scénarios
 
-``` r
-scenarios <- c("V3", "B10",  "B20",  "B30", "B40", "B100", "B150", "B200" )
+```{r multi-scenario, echo=TRUE}
+scenarios <- c("V3","V3_3y" ,"B10",  "B20",  "B30", "B40", "B100", "B150", "B200" )
 chem_base <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_"
 all_results <- data.frame()
 
@@ -158,21 +154,10 @@ for (sc in scenarios) {
   ref_copy$scenario <- sc
   all_results <- bind_rows(all_results, ref_copy)
 }
-```
 
-    ## Traitement du scénario : V3 
-    ## Traitement du scénario : B10 
-    ## Traitement du scénario : B20 
-    ## Traitement du scénario : B30 
-    ## Traitement du scénario : B40 
-    ## Traitement du scénario : B100 
-    ## Traitement du scénario : B150 
-    ## Traitement du scénario : B200
-
-``` r
 res_N <- all_results %>% filter(Lat > 0)
 res_S <- all_results %>% filter(Lat < 0)
-palette_b <- c("V3" = "black", "B10" = "#52e3e1" ,"B20" = "#fdf148" , "B30" ="#d883ff" , "B40" ="#9336fd", "B100" = "#33a8c7" , "B150" = "#ffab00", "B200" = "#a0e426" )
+palette_b <- c("V3" = "black","V3_3y" = "red","B10" = "#52e3e1" ,"B20" = "#fdf148" , "B30" ="#d883ff" , "B40" ="#9336fd", "B100" = "#33a8c7" , "B150" = "#ffab00", "B200" = "#a0e426" )
 
 plot_multi <- function(df, title) {
   ggplot(df, aes(x = Hg0, y = conc_model, color = scenario)) +
@@ -193,5 +178,3 @@ plot_multi(res_N, "Modèle vs obs - Nord") +
   plot_multi(res_S, "Modèle vs obs - Sud") +
   plot_layout(nrow = 2)
 ```
-
-![](Comp_conc_beta_ref_16_06_2025_files/figure-gfm/multi-scenario-1.png)<!-- -->
