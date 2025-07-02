@@ -37,14 +37,14 @@ P <- 101325
 T <- 298.15
 ```
 
-# Concentrations - scénario B25
+# Concentrations - scénario B20
 
 ``` r
-chem_B25 <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B25"
-species_conc_B25 <- nc_open(file.path(chem_B25, "GEOSChem.SpeciesConc.2015_m.nc4"))
-conc_hg0_B25 <- ncvar_get(species_conc_B25, "SpeciesConcVV_Hg0")
-conc_hg0_B25 <- conc_hg0_B25[,,1,]
-time_raw <- ncvar_get(species_conc_B25, "time")
+chem_B20 <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B20"
+species_conc_B20 <- nc_open(file.path(chem_B20, "GEOSChem.SpeciesConc.2015_m.nc4"))
+conc_hg0_B20 <- ncvar_get(species_conc_B20, "SpeciesConcVV_Hg0")
+conc_hg0_B20 <- conc_hg0_B20[,,1,]
+time_raw <- ncvar_get(species_conc_B20, "time")
 origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
 time <- origin_time + time_raw * 60
 days_in_months <- days_in_month(time)
@@ -52,9 +52,9 @@ weights <- days_in_months / sum(days_in_months)
 weighted_avg <- function(x) sum(x * weights)
 lon <- seq(-180, 180, length.out = 144)
 lat <- seq(-90, 90, length.out = 91)
-conc_hg0_B25 <- apply(conc_hg0_B25, MARGIN = c(1, 2), FUN = weighted_avg)
-conc_hg0_B25 <- conc_hg0_B25 * P * (M_Hg / (R * T)) * 1e9
-df_mrtn_B25 <- expand.grid(lon = lon, lat = lat) %>% mutate(conc = as.vector(conc_hg0_B25))
+conc_hg0_B20 <- apply(conc_hg0_B20, MARGIN = c(1, 2), FUN = weighted_avg)
+conc_hg0_B20 <- conc_hg0_B20 * P * (M_Hg / (R * T)) * 1e9
+df_mrtn_B20 <- expand.grid(lon = lon, lat = lat) %>% mutate(conc = as.vector(conc_hg0_B20))
 ```
 
 # Lecture des observations
@@ -83,7 +83,7 @@ get_nearest_conc <- function(station_lon, station_lat, grid_df) {
   return(candidates$conc[nearest_index])
 }
 
-ref_hg0_1$conc_model_mrtn <- mapply(get_nearest_conc, ref_hg0_1$Lon, ref_hg0_1$Lat, MoreArgs = list(grid_df = df_mrtn_B25))
+ref_hg0_1$conc_model_mrtn <- mapply(get_nearest_conc, ref_hg0_1$Lon, ref_hg0_1$Lat, MoreArgs = list(grid_df = df_mrtn_B20))
 ```
 
 # Comparaison graphique - Hémisphères
