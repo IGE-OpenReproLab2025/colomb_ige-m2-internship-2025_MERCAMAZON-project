@@ -36,14 +36,11 @@ library(writexl)
 chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
 statemet<-nc_open(file.path(chem_hist, "GEOSChem.StateMet.2014_2015_m.nc4"))
 
-Met_AIRVOL<-ncvar_get(statemet, "Met_AIRVOL")  #Met_AIRVOL (Volume of grid box m3)
-Met_AIRDEN<-ncvar_get(statemet, "Met_AIRDEN")  #Met_AIRDEN (Dry air density kg m-3)
+
 Met_AD<-ncvar_get(statemet, "Met_AD")  #Met_AD (Dry air mass kg)
 mean_Met_AD <- apply(Met_AD, c(1,2,3), mean, na.rm = TRUE)
 
 
-s_in_yr = 365.2425 * 24 * 3600
-unit_conv = s_in_yr
 kg_Mg = 1e-3
 MW_Hg = 200.59
 avo = 6.02e23
@@ -113,7 +110,7 @@ for (subdir in subdirs) {
     
     # Stocker le résultat
     results_mass_Hg_total <- bind_rows(results_mass_Hg_total, tibble(
-      case = basename(subdir),
+      Scenario = basename(subdir),
       date = file_date,
       total_Hg_mass_tonnes = total_mass_Hg_tonnes
     ))
@@ -121,7 +118,7 @@ for (subdir in subdirs) {
 }
 
 # Résultat trié dans l’ordre temporel
-results_mass_Hg_total <- results_mass_Hg_total %>% arrange(case, date)
+results_mass_Hg_total <- results_mass_Hg_total %>% arrange(Scenario, date)
 results_mass_hg_total_NA<-na.omit(results_mass_Hg_total)
 print(results_mass_hg_total_NA)
 
@@ -129,11 +126,11 @@ print(results_mass_hg_total_NA)
 
 
 
-ggplot(results_mass_hg_total_NA, aes(x = date, y = total_Hg_mass_tonnes, color = case)) +
+ggplot(results_mass_hg_total_NA, aes(x = date, y = total_Hg_mass_tonnes, color = Scenario)) +
   geom_line(size = 1.1) +
   geom_point(size = 2) +
   labs(
-    title = "Évolution mensuelle de la masse totale de mercure (Hg) dans l’atmosphère",
+    title = "Hg mass evolution in atmosphere ",
     x = "Date",
     y = "Masse totale de Hg⁰ (tonnes)"
   ) +
@@ -183,18 +180,18 @@ for (subdir in subdirs) {
     file_date <- as.Date(file_date, format = "%Y%m%d")
 
     results_mass_Hg0 <- bind_rows(results_mass_Hg0, tibble(
-      case = basename(subdir),
+      Scenario = basename(subdir),
       date = file_date,
       total_Hg0_mass_tonnes = total_mass_Hg0_tonnes
     ))
   }
 }
 
-results_mass_Hg0 <- results_mass_Hg0 %>% arrange(case, date)
+results_mass_Hg0 <- results_mass_Hg0 %>% arrange(Scenario, date)
 
 
 
-ggplot(results_mass_Hg0, aes(x = date, y = total_Hg0_mass_tonnes, color = case)) +
+ggplot(results_mass_Hg0, aes(x = date, y = total_Hg0_mass_tonnes, color = Scenario)) +
   geom_line(size = 1.1) +
   geom_point(size = 2) +
   labs(
@@ -263,19 +260,19 @@ for (subdir in subdirs) {
     file_date <- as.Date(file_date, format = "%Y%m%d")
 
     results_mass_Hg2 <- bind_rows(results_mass_Hg2, tibble(
-      case = basename(subdir),
+      Scenario = basename(subdir),
       date = file_date,
       total_Hg2_mass_tonnes = total_mass_Hg_2_tonnes
     ))
   }
 }
 
-results_mass_Hg2 <- results_mass_Hg2 %>% arrange(case, date)
+results_mass_Hg2 <- results_mass_Hg2 %>% arrange(Scenario, date)
 print(results_mass_Hg2)
 
 
 
-ggplot(results_mass_Hg2, aes(x = date, y = total_Hg2_mass_tonnes, color = case)) +
+ggplot(results_mass_Hg2, aes(x = date, y = total_Hg2_mass_tonnes, color = Scenario)) +
   geom_line(size = 1.1) +
   geom_point(size = 2) +
   labs(
