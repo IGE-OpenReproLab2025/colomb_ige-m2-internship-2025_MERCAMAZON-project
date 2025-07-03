@@ -1,31 +1,17 @@
 Mercury mass in atmosphere
 ================
 Martin Colomb
-2025-06-17
+2025-07-03
 
 # Chargement des packages
 
 ``` r
-library(akima)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(ncdf4)
-library(plotly)
-library(RColorBrewer)
-library(raster)
-library(reshape2)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(scales)
-library(sf)
-library(terra)
-library(viridis)
-library(zoo)
-library(patchwork)
-library(maps)
-library(geosphere)
-library(tidyverse)
+library(stringr)
+library(tibble)
 library(writexl)
 ```
 
@@ -33,28 +19,19 @@ library(writexl)
 
 ``` r
 chem_hist_B100<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B100"
+chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
 con_hg_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.SpeciesConc.2015_m.nc4"))
 statemet_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.StateMet.2015_m.nc4"))
 
-
 conc_hg0<-ncvar_get(con_hg_B100, "SpeciesConcVV_Hg0") #Concentration of species Hg0 (mol mol-1 dry)
 
-Met_AIRVOL<-ncvar_get(statemet_B100, "Met_AIRVOL")  #Met_AIRVOL (Volume of grid box m3)
-Met_AIRDEN<-ncvar_get(statemet_B100, "Met_AIRDEN")  #Met_AIRDEN (Dry air density kg m-3)
 Met_AD<-ncvar_get(statemet_B100, "Met_AD")  #Met_AD (Dry air mass kg)
 
-
 area<-ncvar_get(con_hg_B100, "AREA")
-s_in_yr = 365.2425 * 24 * 3600
-unit_conv = s_in_yr
-kg_Mg = 1e-3
-MW_Hg = 200.59
-avo = 6.02e23
-g_kg = 1e-3
-cm2_m2 = 1e4
-unit_conv_dd = MW_Hg / avo * g_kg * cm2_m2 * s_in_yr * area
 M_Hg <- 0.20059
 M_air <- 0.028964
+kg_Mg  <- 1e-3     # conversion en tonnes
+s_in_yr <- 365 * 24 * 3600  # seconds in a year
 ```
 
 # The conversion formula is:
@@ -91,6 +68,122 @@ print(total_mass_hg_tonnes)
 ```
 
     ## [1] 3757.912
+
+``` r
+subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
+subdirs <- subdirs[grepl("HIST_", basename(subdirs))]
+
+# Résultat
+results_mass_Hg0 <- tibble()
+
+for (subdir in subdirs) {
+  file_path <- file.path(subdir, "GEOSChem.SpeciesConc.2015_m.nc4")
+  if (!file.exists(file_path)) next
+  
+  nc <- nc_open(file_path)
+  
+  # Concentration de Hg0
+  conc_hg0 <- ncvar_get(nc, "SpeciesConcVV_Hg0")  # [mol/mol]
+  nc_close(nc)
+  
+  # Moyenne temporelle sur les 12 mois
+  mean_conc_hg0 <- apply(conc_hg0, c(1,2,3), mean, na.rm = TRUE)
+  
+  # Masse (kg) avec mean_Met_AD déjà disponible
+  mass_hg0 <- mean_conc_hg0 * mean_Met_AD * (M_Hg / M_air)
+  total_mass_hg0_tonnes <- sum(mass_hg0, na.rm = TRUE) / 1000
+  
+  results_mass_Hg0 <- bind_rows(results_mass_Hg0, tibble(
+    case = basename(subdir),
+    total_Hg0_mass_tonnes = total_mass_hg0_tonnes
+  ))
+}
+
+# Résultat final
+print(results_mass_Hg0)
+```
+
+    ## # A tibble: 15 × 2
+    ##    case       total_Hg0_mass_tonnes
+    ##    <chr>                      <dbl>
+    ##  1 HIST_B10                   3637.
+    ##  2 HIST_B100                  3758.
+    ##  3 HIST_B150                  3798.
+    ##  4 HIST_B20                   3656.
+    ##  5 HIST_B200                  3828.
+    ##  6 HIST_B25                   2416.
+    ##  7 HIST_B27_5                 2416.
+    ##  8 HIST_B28_5                 2416.
+    ##  9 HIST_B30                   3673.
+    ## 10 HIST_B40                   3688.
+    ## 11 HIST_Bm25                  2416.
+    ## 12 HIST_V3                    3616.
+    ## 13 HIST_V3_3y                 3828.
+    ## 14 HIST_V3_4y                 3873.
+    ## 15 HIST_V4                    3616.
+
+``` r
+subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
+subdirs <- subdirs[grepl("HIST_", basename(subdirs))]
+
+results_mass_Hg_total <- tibble()
+
+for (subdir in subdirs) {
+  file_path <- file.path(subdir, "GEOSChem.SpeciesConc.2015_m.nc4")
+  if (!file.exists(file_path)) next
+  
+  nc <- nc_open(file_path)
+  
+  # Récupérer tous les noms de variables contenant "Hg"
+  hg_vars <- names(nc$var)
+  hg_vars <- hg_vars[grepl("Hg", hg_vars)]
+  
+  # Initialiser la somme avec la première variable Hg
+  Hg_total <- ncvar_get(nc, hg_vars[1])
+  
+  # Ajouter les autres variables Hg
+  if (length(hg_vars) > 1) {
+    for (varname in hg_vars[-1]) {
+      Hg_total <- Hg_total + ncvar_get(nc, varname)
+    }
+  }
+  
+  nc_close(nc)
+  
+  # Moyenne temporelle sur les 12 mois
+  mean_Hg_total <- apply(Hg_total, c(1,2,3), mean, na.rm = TRUE)
+  
+  # Calcul de la masse (kg) avec mean_Met_AD déjà disponible
+  mass_Hg_total <- mean_Hg_total * mean_Met_AD * (M_Hg / M_air)
+  total_mass_Hg_tonnes <- sum(mass_Hg_total, na.rm = TRUE) / 1000
+  
+  results_mass_Hg_total <- bind_rows(results_mass_Hg_total, tibble(
+    case = basename(subdir),
+    total_Hg_mass_tonnes = total_mass_Hg_tonnes
+  ))
+}
+
+print(results_mass_Hg_total)
+```
+
+    ## # A tibble: 15 × 2
+    ##    case       total_Hg_mass_tonnes
+    ##    <chr>                     <dbl>
+    ##  1 HIST_B10                  3767.
+    ##  2 HIST_B100                 3882.
+    ##  3 HIST_B150                 3920.
+    ##  4 HIST_B20                  3785.
+    ##  5 HIST_B200                 3950.
+    ##  6 HIST_B25                  2695.
+    ##  7 HIST_B27_5                2695.
+    ##  8 HIST_B28_5                2695.
+    ##  9 HIST_B30                  3801.
+    ## 10 HIST_B40                  3815.
+    ## 11 HIST_Bm25                 2695.
+    ## 12 HIST_V3                   3747.
+    ## 13 HIST_V3_3y                4013.
+    ## 14 HIST_V3_4y                4093.
+    ## 15 HIST_V4                   3747.
 
 ``` r
 state_files <- list.files(chem_hist_B100, pattern = "GEOSChem.StateMet.*\\.nc4$", full.names = TRUE)
@@ -166,7 +259,7 @@ ggplot(df_mass, aes(x = date, y = mass_tonnes)) +
   )
 ```
 
-![](Mercury_mass_16_06_2025_files/figure-gfm/plot-1.png)<!-- -->
+![](Mercury_mass_23_06_2025_files/figure-gfm/plot-1.png)<!-- -->
 
 ``` r
 print(df_mass)
@@ -231,10 +324,6 @@ print(paste("Moyenne annuelle 2015 :", round(mean_2015, 2), "tonnes"))
     ## [1] "Moyenne annuelle 2015 : 3757.97 tonnes"
 
 ``` r
-# Constantes
-kg_Mg <- 1e-3         # kg to Mg (tonnes)
-s_in_yr <- 365 * 24 * 3600  # seconds in a year
-
 # Dossier principal
 chem_hist <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
 
@@ -298,15 +387,19 @@ for (subdir in subdirs) {
 print(results)
 ```
 
-    ## # A tibble: 6 × 9
-    ##   case      biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
-    ##   <chr>       <dbl>      <dbl>      <dbl>      <dbl> <dbl> <dbl>     <dbl>         <dbl>
-    ## 1 HIST_B05     275.       987.       89.2       310.  250.  838.     1825.          399.
-    ## 2 HIST_B10     275.       987.       89.2       310.  250.  838.     1825.          399.
-    ## 3 HIST_B100    275.       987.       89.2       310.  250.  838.     1825.          399.
-    ## 4 HIST_B150    275.       987.       89.2       310.  250.  838.     1825.          399.
-    ## 5 HIST_B200    275.       987.       89.2       310.  250.  838.     1825.          399.
-    ## 6 HIST_V4_2    275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## # A tibble: 10 × 9
+    ##    case       biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
+    ##    <chr>        <dbl>      <dbl>      <dbl>      <dbl> <dbl> <dbl>     <dbl>         <dbl>
+    ##  1 HIST_B10      275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  2 HIST_B100     275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  3 HIST_B150     275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  4 HIST_B20      275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  5 HIST_B200     275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  6 HIST_B30      275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  7 HIST_B40      275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  8 HIST_Bm25     275.       987.       89.2       310.  250.  838.     1825.          399.
+    ##  9 HIST_V3_3y    275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 10 HIST_V3_4y    275.       987.       89.2       310.  250.  838.     1825.          399.
 
 ``` r
 results_mercuryemis <- tibble()
@@ -349,14 +442,18 @@ for (subdir in subdirs) {
 print(results_mercuryemis)
 ```
 
-    ## # A tibble: 5 × 3
-    ##   case      hg0land hg0soil
-    ##   <chr>       <dbl>   <dbl>
-    ## 1 HIST_B05    134.     839.
-    ## 2 HIST_B10     61.8    839.
-    ## 3 HIST_B100    52.5    839.
-    ## 4 HIST_B150    49.3    839.
-    ## 5 HIST_B200    47.0    839.
+    ## # A tibble: 9 × 3
+    ##   case       hg0land hg0soil
+    ##   <chr>        <dbl>   <dbl>
+    ## 1 HIST_B10      61.8    839.
+    ## 2 HIST_B100     52.5    839.
+    ## 3 HIST_B150     49.3    839.
+    ## 4 HIST_B20      60.4    839.
+    ## 5 HIST_B200     47.0    839.
+    ## 6 HIST_B30      59.1    839.
+    ## 7 HIST_B40      57.9    839.
+    ## 8 HIST_V3_3y    72.5    839.
+    ## 9 HIST_V3_4y    72.7    839.
 
 ``` r
 subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
@@ -409,16 +506,20 @@ for (subdir in subdirs) {
 print(results_drydep)
 ```
 
-    ## # A tibble: 7 × 4
-    ##   case      drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
-    ##   <chr>                 <dbl>             <dbl>             <dbl>
-    ## 1 HIST_B05              1576.             1112.              46.6
-    ## 2 HIST_B10              2174.              801.              65.0
-    ## 3 HIST_B100             2242.              747.              67.8
-    ## 4 HIST_B150             2265.              728.              68.8
-    ## 5 HIST_B200             2282.              713.              69.6
-    ## 6 HIST_V3               2162.              810.              64.5
-    ## 7 HIST_V4_2             1576.             1112.              46.6
+    ## # A tibble: 11 × 4
+    ##    case       drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
+    ##    <chr>                  <dbl>             <dbl>             <dbl>
+    ##  1 HIST_B10               2174.              801.              65.0
+    ##  2 HIST_B100              2242.              747.              67.8
+    ##  3 HIST_B150              2265.              728.              68.8
+    ##  4 HIST_B20               2184.              793.              65.4
+    ##  5 HIST_B200              2283.              712.              69.6
+    ##  6 HIST_B30               2194.              786.              65.7
+    ##  7 HIST_B40               2202.              779.              66.1
+    ##  8 HIST_Bm25              1576.             1112.              46.6
+    ##  9 HIST_V3                2162.              810.              64.5
+    ## 10 HIST_V3_3y             2225.              884.              66.1
+    ## 11 HIST_V3_4y             2230.              887.              66.3
 
 ``` r
 # Sous-dossiers HIST_*
@@ -463,16 +564,20 @@ for (subdir in subdirs) {
 print(results_wetloss)
 ```
 
-    ## # A tibble: 7 × 2
-    ##   case      wetloss_Hg_total_tonnes
-    ##   <chr>                       <dbl>
-    ## 1 HIST_B05                    2865.
-    ## 2 HIST_B10                    1818.
-    ## 3 HIST_B100                   1724.
-    ## 4 HIST_B150                   1694.
-    ## 5 HIST_B200                   1672.
-    ## 6 HIST_V3                     1835.
-    ## 7 HIST_V4_2                   2865.
+    ## # A tibble: 11 × 2
+    ##    case       wetloss_Hg_total_tonnes
+    ##    <chr>                        <dbl>
+    ##  1 HIST_B10                     1818.
+    ##  2 HIST_B100                    1724.
+    ##  3 HIST_B150                    1694.
+    ##  4 HIST_B20                     1803.
+    ##  5 HIST_B200                    1672.
+    ##  6 HIST_B30                     1790.
+    ##  7 HIST_B40                     1778.
+    ##  8 HIST_Bm25                    2865.
+    ##  9 HIST_V3                      1835.
+    ## 10 HIST_V3_3y                   2021.
+    ## 11 HIST_V3_4y                   2029.
 
 ``` r
 file_path <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B10/GEOSChem.WetLossTot_HgSum.2015_m.nc4"
@@ -510,4 +615,11 @@ results_all <- results_wetloss %>%
 
 # Écrire dans un fichier Excel
 write_xlsx(results_all, "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/resultats_mercury.xlsx")
+
+
+# Fusionner les tables selon la colonne commune "case"
+results_mass_all <- results_mass_Hg_total  %>%
+  full_join(results_mass_Hg0, by = "case")
+# Écrire dans un fichier Excel
+write_xlsx(results_mass_all, "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/resultats_mass_mercury.xlsx")
 ```

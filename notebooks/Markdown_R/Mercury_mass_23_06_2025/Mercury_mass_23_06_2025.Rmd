@@ -18,26 +18,12 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 # Chargement des packages
 
 ```{r packages}
-library(akima)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(ncdf4)
-library(plotly)
-library(RColorBrewer)
-library(raster)
-library(reshape2)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(scales)
-library(sf)
-library(terra)
-library(viridis)
-library(zoo)
-library(patchwork)
-library(maps)
-library(geosphere)
-library(tidyverse)
+library(stringr)
+library(tibble)
 library(writexl)
 
 ```
@@ -46,28 +32,21 @@ library(writexl)
 
 ```{r cell-area}
 chem_hist_B100<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B100"
+chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
 con_hg_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.SpeciesConc.2015_m.nc4"))
 statemet_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.StateMet.2015_m.nc4"))
 
-
 conc_hg0<-ncvar_get(con_hg_B100, "SpeciesConcVV_Hg0") #Concentration of species Hg0 (mol mol-1 dry)
 
-Met_AIRVOL<-ncvar_get(statemet_B100, "Met_AIRVOL")  #Met_AIRVOL (Volume of grid box m3)
-Met_AIRDEN<-ncvar_get(statemet_B100, "Met_AIRDEN")  #Met_AIRDEN (Dry air density kg m-3)
 Met_AD<-ncvar_get(statemet_B100, "Met_AD")  #Met_AD (Dry air mass kg)
 
-
 area<-ncvar_get(con_hg_B100, "AREA")
-s_in_yr = 365.2425 * 24 * 3600
-unit_conv = s_in_yr
-kg_Mg = 1e-3
-MW_Hg = 200.59
-avo = 6.02e23
-g_kg = 1e-3
-cm2_m2 = 1e4
-unit_conv_dd = MW_Hg / avo * g_kg * cm2_m2 * s_in_yr * area
 M_Hg <- 0.20059
 M_air <- 0.028964
+kg_Mg  <- 1e-3     # conversion en tonnes
+s_in_yr <- 365 * 24 * 3600  # seconds in a year
+
+
 ```
 
 # The conversion formula is:
@@ -91,7 +70,7 @@ M_air <- 0.028964
 
 # Calcul de la masse de mercure dans l'atmosphère sur l'année
 
-```{r calc year}
+```{r Hg0, echo=TRUE}
 
 
 # Moyenne temporelle sur les 12 mois
@@ -105,6 +84,92 @@ mass_hg <- mean_conc_hg0 * mean_Met_AD * (M_Hg / M_air)
 total_mass_hg <- sum(mass_hg, na.rm = TRUE)  # en kg
 total_mass_hg_tonnes <- total_mass_hg / 1000
 print(total_mass_hg_tonnes)
+
+
+
+
+
+subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
+subdirs <- subdirs[grepl("HIST_", basename(subdirs))]
+
+# Résultat
+results_mass_Hg0 <- tibble()
+
+for (subdir in subdirs) {
+  file_path <- file.path(subdir, "GEOSChem.SpeciesConc.2015_m.nc4")
+  if (!file.exists(file_path)) next
+  
+  nc <- nc_open(file_path)
+  
+  # Concentration de Hg0
+  conc_hg0 <- ncvar_get(nc, "SpeciesConcVV_Hg0")  # [mol/mol]
+  nc_close(nc)
+  
+  # Moyenne temporelle sur les 12 mois
+  mean_conc_hg0 <- apply(conc_hg0, c(1,2,3), mean, na.rm = TRUE)
+  
+  # Masse (kg) avec mean_Met_AD déjà disponible
+  mass_hg0 <- mean_conc_hg0 * mean_Met_AD * (M_Hg / M_air)
+  total_mass_hg0_tonnes <- sum(mass_hg0, na.rm = TRUE) / 1000
+  
+  results_mass_Hg0 <- bind_rows(results_mass_Hg0, tibble(
+    case = basename(subdir),
+    total_Hg0_mass_tonnes = total_mass_hg0_tonnes
+  ))
+}
+
+# Résultat final
+print(results_mass_Hg0)
+
+
+
+
+
+```
+
+```{r Hg tot, echo=TRUE}
+subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
+subdirs <- subdirs[grepl("HIST_", basename(subdirs))]
+
+results_mass_Hg_total <- tibble()
+
+for (subdir in subdirs) {
+  file_path <- file.path(subdir, "GEOSChem.SpeciesConc.2015_m.nc4")
+  if (!file.exists(file_path)) next
+  
+  nc <- nc_open(file_path)
+  
+  # Récupérer tous les noms de variables contenant "Hg"
+  hg_vars <- names(nc$var)
+  hg_vars <- hg_vars[grepl("Hg", hg_vars)]
+  
+  # Initialiser la somme avec la première variable Hg
+  Hg_total <- ncvar_get(nc, hg_vars[1])
+  
+  # Ajouter les autres variables Hg
+  if (length(hg_vars) > 1) {
+    for (varname in hg_vars[-1]) {
+      Hg_total <- Hg_total + ncvar_get(nc, varname)
+    }
+  }
+  
+  nc_close(nc)
+  
+  # Moyenne temporelle sur les 12 mois
+  mean_Hg_total <- apply(Hg_total, c(1,2,3), mean, na.rm = TRUE)
+  
+  # Calcul de la masse (kg) avec mean_Met_AD déjà disponible
+  mass_Hg_total <- mean_Hg_total * mean_Met_AD * (M_Hg / M_air)
+  total_mass_Hg_tonnes <- sum(mass_Hg_total, na.rm = TRUE) / 1000
+  
+  results_mass_Hg_total <- bind_rows(results_mass_Hg_total, tibble(
+    case = basename(subdir),
+    total_Hg_mass_tonnes = total_mass_Hg_tonnes
+  ))
+}
+
+print(results_mass_Hg_total)
+
 
 ```
 
@@ -201,14 +266,14 @@ print(paste("Moyenne janvier–juin 2015 :", round(mean_begin_2015, 2), "tonnes"
 print(paste("Moyenne juillet–décembre 2015 :", round(mean_end_2015, 2), "tonnes"))
 print(paste("Moyenne annuelle 2015 :", round(mean_2015, 2), "tonnes"))
 
+
+
+
 ```
 
 ```{r Emissions (HEMCO diagnostic), echo=TRUE}
 
 
-# Constantes
-kg_Mg <- 1e-3         # kg to Mg (tonnes)
-s_in_yr <- 365 * 24 * 3600  # seconds in a year
 
 # Dossier principal
 chem_hist <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
@@ -461,7 +526,11 @@ results_all <- results_wetloss %>%
 write_xlsx(results_all, "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/resultats_mercury.xlsx")
 
 
-
+# Fusionner les tables selon la colonne commune "case"
+results_mass_all <- results_mass_Hg_total  %>%
+  full_join(results_mass_Hg0, by = "case")
+# Écrire dans un fichier Excel
+write_xlsx(results_mass_all, "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/resultats_mass_mercury.xlsx")
 
 
 ```
