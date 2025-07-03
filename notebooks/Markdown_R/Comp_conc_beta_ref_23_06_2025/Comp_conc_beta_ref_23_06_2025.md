@@ -1,7 +1,7 @@
 Comparaison modèle vs. observations Hg0
 ================
 Martin Colomb
-2025-07-02
+2025-07-03
 
 # Chargement des packages
 
@@ -14,23 +14,9 @@ library(patchwork)
 library(geosphere)
 ```
 
-# Lecture des données de surface de cellule
-
-``` r
-chem<-("C:/Users/colom/Desktop/STAGE/data/clean_mod_data/")
-gboxarea <- nc_open(file.path(chem, "GEOSChem_2x25_gboxarea.nc"))
-area <- ncvar_get(gboxarea, "cell_area")
-```
-
 # Constantes et conversion
 
 ``` r
-s_in_yr = 365.2425 * 24 * 3600
-MW_Hg = 200.59
-avo = 6.02e23
-g_kg = 1e-3
-cm2_m2 = 1e4
-unit_conv_dd = MW_Hg / avo * g_kg * cm2_m2 * s_in_yr * area
 M_Hg <- 200.59
 R <- 8.3145
 P <- 101325
@@ -105,8 +91,8 @@ plot_comparaison <- function(df, title) {
     theme_classic()
 }
 
-plot_comparaison(ref_hg0_1_hemiN, "Comparaison Hémisphère Nord") +
-  plot_comparaison(ref_hg0_1_hemiS, "Comparaison Hémisphère Sud") +
+plot_comparaison(ref_hg0_1_hemiN, "Comparaison C° modèle / observations - Hémisphère Nord (HIST_B20)") +
+  plot_comparaison(ref_hg0_1_hemiS, "Comparaison C° modèle / observations - Hémisphère Sud (HIST_B20)") +
   plot_layout(nrow = 2)
 ```
 
@@ -176,8 +162,8 @@ plot_multi <- function(df, title) {
     theme_classic()
 }
 
-plot_multi(res_N, "Modèle vs obs - Nord") +
-  plot_multi(res_S, "Modèle vs obs - Sud") +
+plot_multi(res_N, "Comparaison concentrations modèle / observations - Hémisphère Nord") +
+  plot_multi(res_S, "Comparaison concentrations modèle / observations - Hémisphère Sud") +
   plot_layout(nrow = 2)
 ```
 
