@@ -1,8 +1,8 @@
 # Informations concernant les codes relatifs aux projet MERCAMAZON Rôle des forêts dans la régulation du mercure atmosphérique.
 ## Peut-on compenser les émissions par la prévention de la déforestation ?
 
-**Auteur :** Martin Colomb  
-**Ref :** Hélène Angot  
+**Auteur :**  Martin Colomb  
+**Ref :**  Hélène Angot  
 ---
 ## Contexte
 
