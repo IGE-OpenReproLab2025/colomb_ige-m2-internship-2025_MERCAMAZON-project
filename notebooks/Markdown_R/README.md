@@ -42,7 +42,7 @@ Ainsi, B10 représente une augmentation de 10% telle que `β=0,011`, B20 de 20% 
 ## 1. Comp_conc_beta_ref_23_06_2025
 [Comp_conc_beta_ref_23_06_2025.md](Comp_conc_beta_ref_23_06_2025/Comp_conc_beta_ref_23_06_2025.md) : 
 
-Ce code sert à :
+Ce code a pour objectifs de :
 - Charger les données chimiques issues de fichiers NetCDF (.nc4) produits par GEOS-Chem
 - Comparer données modélisées et de référence (séparation hémisphère nord - hémisphère sud) pour le scénario B20 (exemple)
 - Comparer données modélisées et de référence pour tous les scénarios
@@ -53,7 +53,7 @@ Ce code sert à :
 ## 2. Evol_mass_mercury_2014_2015_27_06_2025
 [Evol_mass_mercury_2014_2015_27_06_2025.md](Evol_mass_mercury_2014_2015_27_06_2025/Evol_mass_mercury_2014_2015_27_06_2025.md) : 
 
-Ce code sert à :
+Ce code a pour objectifs de :
 - Charger les données climatiques et chimiques issues de fichiers NetCDF (.nc4) produits par GEOS-Chem
 - Calculer la masse totale de mercure (en tonnes) pour :
   - l’ensemble des espèces Hg (Hg_total)
@@ -67,7 +67,7 @@ Ce code sert à :
 ## 3. Mercury_mass_16_06_2025.md
 [Mercury_mass_23_06_2025.md](Mercury_mass_23_06_2025/Mercury_mass_23_06_2025.md) : 
 
-Ce code sert à :
+Ce code a pour objectifs de :
 - Charger les données climatiques et chimiques issues de fichiers NetCDF (.nc4) produits par GEOS-Chem
 - Calcul de la masse de Hg⁰ dans l’atmosphère
 - Traitement des fichiers mensuels pour extraire la masse mensuelle de Hg⁰ sur l’année 2015
@@ -78,7 +78,14 @@ Ce code sert à :
 - Export des résultats dans un fichier Excel 
 
 
-
-
-
 ---
+
+## 4. Map_mod_vs_ref_04_07_2025
+[Map_mod_vs_ref_04_07_2025.md](Map_mod_vs_ref_04_07_2025/Map_mod_vs_ref_04_07_2025.md) : 
+
+Ce code a pour objectifs de :
+- Lire les fichiers NetCDF et calculer les moyennes pondérées annuelles
+- Visualiser les concentrations modélisées
+- Comparer visuellement les simulations aux observations
+
+
