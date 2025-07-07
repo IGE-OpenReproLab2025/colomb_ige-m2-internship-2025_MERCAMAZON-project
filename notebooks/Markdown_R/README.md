@@ -84,6 +84,26 @@ Ce code a pour objectifs de :
 - Comparer visuellement les simulations aux observations
 
 ---
+## Versions du logiciel et des librairies
+
+Logiciel R / Rstudio : R-4.4.2
+
+| Package     | Version  |
+|-------------|----------|
+| dplyr       | 1.1.4    |
+| geosphere   | 1.5.20   |
+| ggplot2     | 3.5.1    |
+| lubridate   | 1.9.4    |
+| maps        | 3.4.2.1  |
+| ncdf4       | 1.23     |
+| patchwork   | 1.3.0    |
+| stringr     | 1.5.1    |
+| tibble      | 3.2.1    |
+| viridis     | 0.6.5    |
+| writexl     | 1.5.4    |
+
+
+---
 ### Stratégies de conservation du code
 
 Dans le cadre de ce stage, une attention particulière a été portée à la conservation du code, tant à court qu’à long terme.
