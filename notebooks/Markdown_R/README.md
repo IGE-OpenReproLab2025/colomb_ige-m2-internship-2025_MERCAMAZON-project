@@ -37,8 +37,6 @@ où  *J<sub>NO₂</sub>* est la fréquence locale de photolyse du NO₂, et le f
 Ainsi, B10 représente une augmentation de 10% telle que `β=0,011`, B20 de 20% `β=0,012` etc.
 
 ---
-
-
 ## 1. Comp_conc_beta_ref_23_06_2025
 [Comp_conc_beta_ref_23_06_2025.md](Comp_conc_beta_ref_23_06_2025/Comp_conc_beta_ref_23_06_2025.md) : 
 
@@ -49,7 +47,6 @@ Ce code a pour objectifs de :
 
 
 ---
-
 ## 2. Evol_mass_mercury_2014_2015_27_06_2025
 [Evol_mass_mercury_2014_2015_27_06_2025.md](Evol_mass_mercury_2014_2015_27_06_2025/Evol_mass_mercury_2014_2015_27_06_2025.md) : 
 
@@ -63,7 +60,6 @@ Ce code a pour objectifs de :
 
 
 ---
-
 ## 3. Mercury_mass_16_06_2025.md
 [Mercury_mass_23_06_2025.md](Mercury_mass_23_06_2025/Mercury_mass_23_06_2025.md) : 
 
@@ -79,7 +75,6 @@ Ce code a pour objectifs de :
 
 
 ---
-
 ## 4. Map_mod_vs_ref_04_07_2025
 [Map_mod_vs_ref_04_07_2025.md](Map_mod_vs_ref_04_07_2025/Map_mod_vs_ref_04_07_2025.md) : 
 
@@ -88,4 +83,15 @@ Ce code a pour objectifs de :
 - Visualiser les concentrations modélisées
 - Comparer visuellement les simulations aux observations
 
+---
+### Stratégies de conservation du code
 
+Dans le cadre de ce stage, une attention particulière a été portée à la conservation du code, tant à court qu’à long terme.
+À court terme, le code est organisé, commenté et sauvegardé régulièrement afin de faciliter les tests, les ajustements et les retours pendant la période de développement.
+À long terme, l’ensemble du travail est documenté (README, commentaires, structure des fichiers) et conservé dans un dépôt versionné (par exemple Git), permettant sa reprise ou son évolution par d’autres membres de l’équipe ou pour de futurs travaux.
+
+---
+### Stratégies de conservation des données
+
+À court terme les données utilisées et produites durant le stage sont conservées de manière organisée et sécurisée sur Zenodo.
+À long terme, les fichiers importants sont stockés dans un espace dédié (répertoire partagé, serveur de l’équipe, etc.) avec une structure claire et une documentation associée, afin d’en permettre la réutilisation ou la vérification dans le cadre de travaux futurs.
