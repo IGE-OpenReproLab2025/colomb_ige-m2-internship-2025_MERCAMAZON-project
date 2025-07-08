@@ -1,6 +1,8 @@
 # Project MERCAMAZON 
 
-# Informations concernant les codes relatifs aux projet MERCAMAZON Rôle des forêts dans la régulation du mercure atmosphérique.
+
+# Informations concernant le projet MERCAMAZON : Rôle des forêts dans la régulation du mercure atmosphérique.
+ 
 
 ## Peut-on compenser les émissions par la prévention de la déforestation ?
 
