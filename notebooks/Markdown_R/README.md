@@ -113,5 +113,5 @@ Dans le cadre de ce stage, une attention particulière a été portée à la con
 ---
 ### Stratégies de conservation des données
 
-À court terme les données utilisées et produites durant le stage sont conservées de manière organisée et sécurisée sur Zenodo.
+À court terme les données utilisées et produites durant le stage sont conservées de manière organisée et sécurisée sur Zenodo (Actuellement sur [Google Drive](https://drive.google.com/file/d/1nQpKIO5ppbKZYkHsfV--BPHWDcm6tgxA/view?usp=sharing) car problème pour les importer sur Zenodo.).
 À long terme, les fichiers importants sont stockés dans un espace dédié (répertoire partagé, serveur de l’équipe, etc.) avec une structure claire et une documentation associée, afin d’en permettre la réutilisation ou la vérification dans le cadre de travaux futurs.
