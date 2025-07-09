@@ -36,6 +36,8 @@ où  *J<sub>NO₂</sub>* est la fréquence locale de photolyse du NO₂, et le f
 
 Ainsi, B10 représente une augmentation de 10% telle que `β=0,011`, B20 de 20% `β=0,012` etc.
 
+L'objectif de ces changements de valeur de β ont pour objectif d'affiner aux mieux les valeurs de concentrations en Hg<sup>0</sup> et Hg<sup>II</sup>
+
 ---
 ## 1. Comp_conc_beta_ref_23_06_2025
 [Comp_conc_beta_ref_23_06_2025.md](Comp_conc_beta_ref_23_06_2025/Comp_conc_beta_ref_23_06_2025.md) : 
