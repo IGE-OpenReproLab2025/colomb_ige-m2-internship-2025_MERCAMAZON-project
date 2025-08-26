@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+box-sizing: border-box;
+min-width: 200px;
+max-width: 980px;
+margin: 0 auto;
+padding: 45px;
+padding-top: 0px;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="mercury-mass-in-atmosphere---edgar-inventory">Mercury mass in
+atmosphere - EDGAR INVENTORY</h1>
+<p>Martin Colomb 2025-08-26</p>
+<h1 id="chargement-des-packages">Chargement des packages</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(writexl)</span></code></pre></div>
+<h1 id="lecture-des-données">Lecture des données</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>chem_hist_B100<span class="ot">&lt;-</span><span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B100&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>chem_hist<span class="ot">&lt;-</span><span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>chem_EDGAR <span class="ot">&lt;-</span> <span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/EDGAR&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>con_hg_B100<span class="ot">&lt;-</span><span class="fu">nc_open</span>(<span class="fu">file.path</span>(chem_hist_B100, <span class="st">&quot;GEOSChem.SpeciesConc.2015_m.nc4&quot;</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>statemet_B100<span class="ot">&lt;-</span><span class="fu">nc_open</span>(<span class="fu">file.path</span>(chem_hist_B100, <span class="st">&quot;GEOSChem.StateMet.2015_m.nc4&quot;</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>area<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;AREA&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>conc_hg0<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;SpeciesConcVV_Hg0&quot;</span>) <span class="co">#Concentration of species Hg0 (mol mol-1 dry)</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>Met_AD<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(statemet_B100, <span class="st">&quot;Met_AD&quot;</span>)  <span class="co">#Met_AD (Dry air mass kg)</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>area<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;AREA&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>s_in_yr <span class="ot">=</span> <span class="fl">365.2425</span> <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">3600</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>unit_conv <span class="ot">=</span> s_in_yr</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>kg_Mg <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>MW_Hg <span class="ot">=</span> <span class="fl">200.59</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>avo <span class="ot">=</span> <span class="fl">6.02e23</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>g_kg <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>cm2_m2 <span class="ot">=</span> <span class="fl">1e4</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>unit_conv_dd <span class="ot">=</span> MW_Hg <span class="sc">/</span> avo <span class="sc">*</span> g_kg <span class="sc">*</span> cm2_m2 <span class="sc">*</span> s_in_yr <span class="sc">*</span> area</span></code></pre></div>
+<h1 id="the-conversion-formula-is">The conversion formula is:</h1>
+<pre><code>    mol species                g/mol species
+    ----------- * kg dry air * -------------
+    mol dry air                g/mol dry air
+
+    = volume mixing ratio * dry air mass * MW species / MW dry air
+
+    = kg species
+    
+        
+    MW dry air is defined as 28.9644 g/mol
+    https://github.com/geoschem/geos-chem/blob/4722f288e90291ba904222f4bbe4fc216d17c34a/Headers/physconstants.F90#L26</code></pre>
+<h1 id="calcul-de-la-masse-de-mercure-dans-latmosphère-sur-lannée">Calcul de
+la masse de mercure dans l’atmosphère sur l’année</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Moyenne temporelle sur les 12 mois</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mean_Met_AD <span class="ot">&lt;-</span> <span class="fu">apply</span>(Met_AD, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_EDGAR, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;^V&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># Résultat</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>results_mass_Hg0 <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(subdir, <span class="st">&quot;GEOSChem.SpeciesConc.2015_m.nc4&quot;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) <span class="cf">next</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  </span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  nc <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  </span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="co"># Concentration de Hg0</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>  conc_hg0 <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc, <span class="st">&quot;SpeciesConcVV_Hg0&quot;</span>)  <span class="co"># [mol/mol]</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>  <span class="fu">nc_close</span>(nc)</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  </span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  <span class="co"># Moyenne temporelle sur les 12 mois</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  mean_conc_hg0 <span class="ot">&lt;-</span> <span class="fu">apply</span>(conc_hg0, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  </span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>  <span class="co"># Masse (kg) avec mean_Met_AD déjà disponible</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>  mass_hg0 <span class="ot">&lt;-</span> mean_conc_hg0 <span class="sc">*</span> mean_Met_AD <span class="sc">*</span> (M_Hg <span class="sc">/</span> M_air)</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>  total_mass_hg0_tonnes <span class="ot">&lt;-</span> <span class="fu">sum</span>(mass_hg0, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>  </span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>  results_mass_Hg0 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results_mass_Hg0, <span class="fu">tibble</span>(</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>    <span class="at">case =</span> <span class="fu">basename</span>(subdir),</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>    <span class="at">total_Hg0_mass_tonnes =</span> total_mass_hg0_tonnes</span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>  ))</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>}</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a><span class="co"># Résultat final</span></span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a><span class="fu">print</span>(results_mass_Hg0)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   case   total_Hg0_mass_tonnes
+##   &lt;chr&gt;                  &lt;dbl&gt;
+## 1 V03A03                 3133.
+## 2 V03A20                 3373.
+## 3 V20A03                 3155.
+## 4 V20A20                 3396.</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_EDGAR, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;^V&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>results_mass_Hg_total <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(subdir, <span class="st">&quot;GEOSChem.SpeciesConc.2015_m.nc4&quot;</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) <span class="cf">next</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  </span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  nc <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  </span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="co"># Récupérer tous les noms de variables contenant &quot;Hg&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  hg_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(nc<span class="sc">$</span>var)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  hg_vars <span class="ot">&lt;-</span> hg_vars[<span class="fu">grepl</span>(<span class="st">&quot;Hg&quot;</span>, hg_vars)]</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  </span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="co"># Initialiser la somme avec la première variable Hg</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  Hg_total <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc, hg_vars[<span class="dv">1</span>])</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  </span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="co"># Ajouter les autres variables Hg</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(hg_vars) <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>    <span class="cf">for</span> (varname <span class="cf">in</span> hg_vars[<span class="sc">-</span><span class="dv">1</span>]) {</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>      Hg_total <span class="ot">&lt;-</span> Hg_total <span class="sc">+</span> <span class="fu">ncvar_get</span>(nc, varname)</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>    }</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>  }</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>  </span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>  <span class="fu">nc_close</span>(nc)</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>  </span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>  <span class="co"># Moyenne temporelle sur les 12 mois</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>  mean_Hg_total <span class="ot">&lt;-</span> <span class="fu">apply</span>(Hg_total, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>  </span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  <span class="co"># Calcul de la masse (kg) avec mean_Met_AD déjà disponible</span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>  mass_Hg_total <span class="ot">&lt;-</span> mean_Hg_total <span class="sc">*</span> mean_Met_AD <span class="sc">*</span> (M_Hg <span class="sc">/</span> M_air)</span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>  total_mass_Hg_tonnes <span class="ot">&lt;-</span> <span class="fu">sum</span>(mass_Hg_total, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="dv">1000</span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>  </span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a>  results_mass_Hg_total <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results_mass_Hg_total, <span class="fu">tibble</span>(</span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a>    <span class="at">case =</span> <span class="fu">basename</span>(subdir),</span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a>    <span class="at">total_Hg_mass_tonnes =</span> total_mass_Hg_tonnes</span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a>  ))</span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a>}</span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="fu">print</span>(results_mass_Hg_total)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   case   total_Hg_mass_tonnes
+##   &lt;chr&gt;                 &lt;dbl&gt;
+## 1 V03A03                3253.
+## 2 V03A20                3502.
+## 3 V20A03                3275.
+## 4 V20A20                3527.</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Lister les sous-dossiers HIST_*</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_EDGAR, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;^V&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># Initialiser un tableau pour stocker les résultats</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(subdir, <span class="st">&quot;HEMCO_diagnostic_2015_m.nc4&quot;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  </span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) <span class="cf">next</span>  <span class="co"># skip si fichier manquant</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  </span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  hemco_diagn <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  </span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  <span class="co"># Extraire temps et poids mensuels</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  time_raw <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(hemco_diagn, <span class="st">&quot;time&quot;</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  origin_time <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">&quot;2015-01-01 00:00:00&quot;</span>, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  time <span class="ot">&lt;-</span> origin_time <span class="sc">+</span> time_raw <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  weights <span class="ot">&lt;-</span> <span class="fu">days_in_month</span>(time) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">days_in_month</span>(time))</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>  </span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  <span class="co"># Fonction de moyenne pondérée</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  weighted_avg <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sum</span>(x <span class="sc">*</span> weights)</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  </span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>  <span class="co"># Aire des cellules</span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>  area <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(hemco_diagn, <span class="st">&quot;AREA&quot;</span>)  <span class="co"># en m²</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>  <span class="co"># Liste des variables d&#39;intérêt</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>  vars <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>    <span class="at">biomass      =</span> <span class="st">&quot;EmisHg0_BioBurn&quot;</span>,</span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>    <span class="at">hg0_anthro   =</span> <span class="st">&quot;EmisHg0_Anthro&quot;</span>,</span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>    <span class="at">hg2_anthro   =</span> <span class="st">&quot;EmisHg2ClP_Anthro&quot;</span>,</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>    <span class="at">hgp_anthro   =</span> <span class="st">&quot;EmisHgCl2_Anthro&quot;</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>    <span class="at">geo          =</span> <span class="st">&quot;EmisHg0_Natural&quot;</span>,</span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>    <span class="at">asgm         =</span> <span class="st">&quot;EmisHg0_ASGM&quot;</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>  )</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>  </span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a>  <span class="co"># Stockage temporaire</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>  row <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">case =</span> <span class="fu">basename</span>(subdir))</span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>  </span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a>  <span class="cf">for</span> (name <span class="cf">in</span> <span class="fu">names</span>(vars)) {</span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a>    varname <span class="ot">&lt;-</span> vars[[name]]</span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>    emis <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(hemco_diagn, varname)  <span class="co"># [lon, lat, time]</span></span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a>    emis_avg <span class="ot">&lt;-</span> <span class="fu">apply</span>(emis, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), weighted_avg)</span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a>    total <span class="ot">&lt;-</span> <span class="fu">sum</span>(emis_avg <span class="sc">*</span> area <span class="sc">*</span> s_in_yr <span class="sc">*</span> kg_Mg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>    row[[name]] <span class="ot">&lt;-</span> total</span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a>  }</span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a>  </span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a>  <span class="co"># Ajouter les calculs additionnels</span></span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>  row<span class="sc">$</span>total_hg0      <span class="ot">&lt;-</span> row<span class="sc">$</span>hg0_anthro <span class="sc">+</span> row<span class="sc">$</span>asgm</span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>  row<span class="sc">$</span>total_hg2_hgp  <span class="ot">&lt;-</span> row<span class="sc">$</span>hg2_anthro <span class="sc">+</span> row<span class="sc">$</span>hgp_anthro</span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>  </span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a>  <span class="co"># Ajouter au tableau final</span></span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results, <span class="fu">as_tibble</span>(row))</span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a>  </span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>  <span class="fu">nc_close</span>(hemco_diagn)</span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a>}</span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a><span class="fu">print</span>(results)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 9
+##   case   biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
+##   &lt;chr&gt;    &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 V03A03    275.      1004.       34.0       254.  250.     0     1004.          288.
+## 2 V03A20    275.      1482.       43.9       314.  250.     0     1482.          358.
+## 3 V20A03    275.      1004.       34.0       254.  250.     0     1004.          288.
+## 4 V20A20    275.      1482.       43.9       314.  250.     0     1482.          358.</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>results_mercuryemis <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(subdir, <span class="st">&quot;GEOSChem.MercuryEmis.alltime_m.nc4&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  </span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) <span class="cf">next</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  </span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  merc_emiss <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  </span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="co"># Temps et poids mensuels</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  time_raw <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(merc_emiss, <span class="st">&quot;time&quot;</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  origin_time <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">&quot;2015-01-01 00:00:00&quot;</span>, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  time <span class="ot">&lt;-</span> origin_time <span class="sc">+</span> time_raw <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  weights <span class="ot">&lt;-</span> <span class="fu">days_in_month</span>(time) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">days_in_month</span>(time))</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>  weighted_avg <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">sum</span>(x <span class="sc">*</span> weights)</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>  </span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>  <span class="co"># Emissions</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>  hg0land <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(merc_emiss, <span class="st">&quot;EmisHg0land&quot;</span>)  <span class="co"># [lon, lat, time]</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>  hg0soil <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(merc_emiss, <span class="st">&quot;EmisHg0soil&quot;</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>  <span class="co"># Calculs</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>  hg0land_mean <span class="ot">&lt;-</span> <span class="fu">apply</span>(hg0land, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), weighted_avg)</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>  hg0soil_mean <span class="ot">&lt;-</span> <span class="fu">apply</span>(hg0soil, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), weighted_avg)</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>  </span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>  total_hg0land <span class="ot">&lt;-</span> <span class="fu">sum</span>(hg0land_mean) <span class="sc">*</span> s_in_yr <span class="sc">*</span> kg_Mg</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>  total_hg0soil <span class="ot">&lt;-</span> <span class="fu">sum</span>(hg0soil_mean) <span class="sc">*</span> s_in_yr <span class="sc">*</span> kg_Mg</span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>  </span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a>  <span class="co"># Ajouter au tableau</span></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a>  results_mercuryemis <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results_mercuryemis, <span class="fu">tibble</span>(</span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a>    <span class="at">case =</span> <span class="fu">basename</span>(subdir),</span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a>    <span class="at">hg0land =</span> total_hg0land,</span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a>    <span class="at">hg0soil =</span> total_hg0soil</span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a>  ))</span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a>  </span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a>  <span class="fu">nc_close</span>(merc_emiss)</span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a>}</span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a></span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="fu">print</span>(results_mercuryemis)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 3
+##   case   hg0land hg0soil
+##   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+## 1 V03A03    58.2    840.
+## 2 V03A20    63.7    840.
+## 3 V20A03    58.4    840.
+## 4 V20A20    64.0    840.</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_EDGAR, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;^V&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co"># Initialiser les résultats</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>results_drydep <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co"># Fonction de moyenne pondérée</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>weighted_avg <span class="ot">&lt;-</span> <span class="cf">function</span>(x, weights) <span class="fu">sum</span>(x <span class="sc">*</span> weights)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co"># Boucle sur les cas</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(subdir, <span class="st">&quot;GEOSChem.DryDep.2015_m.nc4&quot;</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) <span class="cf">next</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>  </span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>  drydep_nc <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>  </span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>  <span class="co"># Temps</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>  time_raw <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(drydep_nc, <span class="st">&quot;time&quot;</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>  origin_time <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">&quot;2015-01-01 00:00:00&quot;</span>, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>  time <span class="ot">&lt;-</span> origin_time <span class="sc">+</span> time_raw <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>  days_in_months <span class="ot">&lt;-</span> <span class="fu">days_in_month</span>(time)</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>  weights <span class="ot">&lt;-</span> days_in_months <span class="sc">/</span> <span class="fu">sum</span>(days_in_months)</span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>  </span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>  <span class="co"># Extraction et traitement des 3 espèces</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>  get_drydep_sum <span class="ot">&lt;-</span> <span class="cf">function</span>(varname) {</span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>    var <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(drydep_nc, varname)</span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>    var <span class="ot">&lt;-</span> <span class="fu">apply</span>(var, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), weighted_avg, <span class="at">weights =</span> weights)</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>    var <span class="ot">&lt;-</span> var <span class="sc">*</span> unit_conv_dd <span class="sc">*</span> kg_Mg</span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>    <span class="fu">sum</span>(var, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a>  }</span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>  </span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a>  DryDep_Hg0_hist <span class="ot">&lt;-</span> <span class="fu">get_drydep_sum</span>(<span class="st">&quot;DryDep_Hg0&quot;</span>)</span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a>  DryDep_Hg2_hist <span class="ot">&lt;-</span> <span class="fu">get_drydep_sum</span>(<span class="st">&quot;DryDep_Hg2&quot;</span>)</span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a>  DryDep_HgP_hist <span class="ot">&lt;-</span> <span class="fu">get_drydep_sum</span>(<span class="st">&quot;DryDep_HgP&quot;</span>)</span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a>  </span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a>  <span class="co"># Stocker</span></span>
+<span id="cb12-37"><a href="#cb12-37" tabindex="-1"></a>  results_drydep <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results_drydep, <span class="fu">tibble</span>(</span>
+<span id="cb12-38"><a href="#cb12-38" tabindex="-1"></a>    <span class="at">case =</span> <span class="fu">basename</span>(subdir),</span>
+<span id="cb12-39"><a href="#cb12-39" tabindex="-1"></a>    <span class="at">drydep_Hg0_tonnes =</span> DryDep_Hg0_hist,</span>
+<span id="cb12-40"><a href="#cb12-40" tabindex="-1"></a>    <span class="at">drydep_Hg2_tonnes =</span> DryDep_Hg2_hist,</span>
+<span id="cb12-41"><a href="#cb12-41" tabindex="-1"></a>    <span class="at">drydep_HgP_tonnes =</span> DryDep_HgP_hist</span>
+<span id="cb12-42"><a href="#cb12-42" tabindex="-1"></a>  ))</span>
+<span id="cb12-43"><a href="#cb12-43" tabindex="-1"></a>  </span>
+<span id="cb12-44"><a href="#cb12-44" tabindex="-1"></a>  <span class="fu">nc_close</span>(drydep_nc)</span>
+<span id="cb12-45"><a href="#cb12-45" tabindex="-1"></a>}</span>
+<span id="cb12-46"><a href="#cb12-46" tabindex="-1"></a></span>
+<span id="cb12-47"><a href="#cb12-47" tabindex="-1"></a><span class="co"># Afficher les résultats</span></span>
+<span id="cb12-48"><a href="#cb12-48" tabindex="-1"></a><span class="fu">print</span>(results_drydep)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 4
+##   case   drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
+##   &lt;chr&gt;              &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;
+## 1 V03A03             1811.              746.              57.9
+## 2 V03A20             1990.              793.              60.7
+## 3 V20A03             1773.              750.              58.2
+## 4 V20A20             1948.              797.              61.0</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_EDGAR, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;^V&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># Initialiser le tableau des résultats</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>results_wetloss <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co"># Fonction de moyenne pondérée</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>weighted_avg <span class="ot">&lt;-</span> <span class="cf">function</span>(x, weights) <span class="fu">sum</span>(x <span class="sc">*</span> weights)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co"># Boucle sur les cas</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(subdir, <span class="st">&quot;GEOSChem.WetLossTot_HgSum.2015_m.nc4&quot;</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) <span class="cf">next</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  </span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  wetloss_nc <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>  </span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>  <span class="co"># Temps</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>  time_raw <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(wetloss_nc, <span class="st">&quot;time&quot;</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>  origin_time <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">&quot;2015-01-01 00:00:00&quot;</span>, <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>)</span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>  time <span class="ot">&lt;-</span> origin_time <span class="sc">+</span> time_raw <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>  days_in_months <span class="ot">&lt;-</span> <span class="fu">days_in_month</span>(time)</span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a>  weights <span class="ot">&lt;-</span> days_in_months <span class="sc">/</span> <span class="fu">sum</span>(days_in_months)</span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a>  </span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a>  <span class="co"># Extraction et traitement</span></span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a>  wetloss_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(wetloss_nc, <span class="st">&quot;WetLossTot_HgSum&quot;</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a>  wetloss_array <span class="ot">&lt;-</span> <span class="fu">apply</span>(wetloss_array, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), weighted_avg, <span class="at">weights =</span> weights)</span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a>  wetloss_total_tonnes <span class="ot">&lt;-</span> <span class="fu">sum</span>(wetloss_array <span class="sc">*</span> s_in_yr <span class="sc">*</span> kg_Mg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a>  </span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>  <span class="co"># Stocker</span></span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a>  results_wetloss <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results_wetloss, <span class="fu">tibble</span>(</span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a>    <span class="at">case =</span> <span class="fu">basename</span>(subdir),</span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a>    <span class="at">wetloss_Hg_total_tonnes =</span> wetloss_total_tonnes</span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a>  ))</span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a>  </span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a>  <span class="fu">nc_close</span>(wetloss_nc)</span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a>}</span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a></span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co"># Afficher les résultats</span></span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="fu">print</span>(results_wetloss)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##   case   wetloss_Hg_total_tonnes
+##   &lt;chr&gt;                    &lt;dbl&gt;
+## 1 V03A03                   1681.
+## 2 V03A20                   1818.
+## 3 V20A03                   1692.
+## 4 V20A20                   1830.</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Fusionner les tables selon la colonne commune &quot;case&quot;</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>results_all <span class="ot">&lt;-</span> results_wetloss <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">full_join</span>(results_drydep, <span class="at">by =</span> <span class="st">&quot;case&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">full_join</span>(results_mercuryemis, <span class="at">by =</span> <span class="st">&quot;case&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">full_join</span>(results, <span class="at">by =</span> <span class="st">&quot;case&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># Écrire dans un fichier Excel</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="fu">write_xlsx</span>(results_all, <span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/EDGAR_resultats_mercury.xlsx&quot;</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co"># Fusionner les tables selon la colonne commune &quot;case&quot;</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>results_mass_all <span class="ot">&lt;-</span> results_mass_Hg_total  <span class="sc">%&gt;%</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="fu">full_join</span>(results_mass_Hg0, <span class="at">by =</span> <span class="st">&quot;case&quot;</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co"># Écrire dans un fichier Excel</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="fu">write_xlsx</span>(results_mass_all, <span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/EDGAR_resultats_mass_mercury.xlsx&quot;</span>)</span></code></pre></div>
+
+</body>
+</html>

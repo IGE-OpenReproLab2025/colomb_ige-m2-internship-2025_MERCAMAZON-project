@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+box-sizing: border-box;
+min-width: 200px;
+max-width: 980px;
+margin: 0 auto;
+padding: 45px;
+padding-top: 0px;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="evol_mass_2012_2015">Evol_mass_2012_2015</h1>
+<p>Martin Colomb 2025-08-26</p>
+<h1 id="chargement-des-packages">Chargement des packages</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(writexl)</span></code></pre></div>
+<h1 id="lecture-des-données">Lecture des données</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>chem_hist<span class="ot">&lt;-</span><span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>statemet<span class="ot">&lt;-</span><span class="fu">nc_open</span>(<span class="fu">file.path</span>(chem_hist, <span class="st">&quot;GEOSChem.StateMet.2014_2015_m.nc4&quot;</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>Met_AD<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(statemet, <span class="st">&quot;Met_AD&quot;</span>)  <span class="co">#Met_AD (Dry air mass kg)</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>mean_Met_AD <span class="ot">&lt;-</span> <span class="fu">apply</span>(Met_AD, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>kg_Mg <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>MW_Hg <span class="ot">=</span> <span class="fl">200.59</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>avo <span class="ot">=</span> <span class="fl">6.02e23</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>g_kg <span class="ot">=</span> <span class="fl">1e-3</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>cm2_m2 <span class="ot">=</span> <span class="fl">1e4</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>M_Hg <span class="ot">&lt;-</span> <span class="fl">0.20059</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>M_air <span class="ot">&lt;-</span> <span class="fl">0.028964</span></span></code></pre></div>
+<h1 id="the-conversion-formula-is">The conversion formula is:</h1>
+<pre><code>    mol species                g/mol species
+    ----------- * kg dry air * -------------
+    mol dry air                g/mol dry air
+
+    = volume mixing ratio * dry air mass * MW species / MW dry air
+
+    = kg species
+    
+        
+    MW dry air is defined as 28.9644 g/mol
+    https://github.com/geoschem/geos-chem/blob/4722f288e90291ba904222f4bbe4fc216d17c34a/Headers/physconstants.F90#L26</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>conc_2012_2015<span class="ot">&lt;-</span><span class="fu">nc_open</span>(<span class="fu">file.path</span>(chem_hist, <span class="st">&quot;HIST_4y/GEOSChem.SpeciesConc.2012_2015_m.nc4&quot;</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">print</span>(conc_2012_2015)</span></code></pre></div>
+<pre><code>## File C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_4y/GEOSChem.SpeciesConc.2012_2015_m.nc4 (NC_FORMAT_NETCDF4_CLASSIC):
+## 
+##      49 variables (excluding dimension variables):
+##         double time_bnds[bnds,time]   (Chunking: [2,1])  
+##         double lon_bnds[bnds,lon]   (Contiguous storage)  
+##         double lat_bnds[bnds,lat]   (Contiguous storage)  
+##         double lev_bnds[bnds,lev]   (Contiguous storage)  
+##             standard_name: atmosphere_hybrid_sigma_pressure_coordinate
+##             units: level
+##             formula_terms: ap: ap_bnds b: b_bnds ps: ps
+##         float AREA[lon,lat]   (Chunking: [144,91])  
+##             long_name: Surface area
+##             units: m2
+##             cell_methods: time: mean
+##         float SpeciesConcVV_CH4[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species CH4
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_CO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species CO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_ClO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species ClO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_BrO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species BrO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_O3[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species O3
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_NO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species NO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_NO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species NO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_OH[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species OH
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_Cl[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species Cl
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_Br[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species Br
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBrO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBrO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOHO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOHO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_PHg2Cl[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species PHg2Cl
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_PHg2OH[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species PHg2OH
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_PHg2Br[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species PHg2Br
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_PHg0[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species PHg0
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_PHg2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species PHg2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_Hg2STRP[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species Hg2STRP
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_Hg2ORGP[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species Hg2ORGP
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_Hg2ClP[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species Hg2ClP
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgCl2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgCl2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOHOH[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOHOH
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOHBrO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOHBrO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOHClO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOHClO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOHHO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOHHO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOHNO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOHNO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgOH[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgOH
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClOH[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClOH
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClBr[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClBr
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClBrO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClBrO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClClO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClClO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClHO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClHO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgClNO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgClNO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgCl[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgCl
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBr2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBr2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBrOH[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBrOH
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBrClO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBrClO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBrBrO[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBrBrO
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBrHO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBrHO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBrNO2[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBrNO2
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_HgBr[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species HgBr
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+##         float SpeciesConcVV_Hg0[lon,lat,lev,time]   (Chunking: [144,91,1,1])  
+##             long_name: Concentration of species Hg0
+##             units: mol mol-1 dry
+##             cell_methods: time: mean
+##             averaging_method: time-averaged
+## 
+##      5 dimensions:
+##         time  Size:48   *** is unlimited *** 
+##             standard_name: time
+##             long_name: Time
+##             bounds: time_bnds
+##             units: minutes since 2012-01-01 00:00:00
+##             calendar: gregorian
+##             axis: T
+##         bnds  Size:2 (no dimvar)
+##         lon  Size:144 
+##             standard_name: longitude
+##             long_name: Longitude
+##             units: degrees_east
+##             axis: X
+##             bounds: lon_bnds
+##         lat  Size:91 
+##             standard_name: latitude
+##             long_name: Latitude
+##             units: degrees_north
+##             axis: Y
+##             bounds: lat_bnds
+##         lev  Size:47 
+##             standard_name: atmosphere_hybrid_sigma_pressure_coordinate
+##             axis: Z
+##             positive: down
+##             long_name: hybrid sigma pressure coordinate
+##             units: level
+##             formula_terms: ap: ap b: b ps: ps
+##             bounds: lev_bnds
+## 
+##     13 global attributes:
+##         CDI: Climate Data Interface version 2.1.1 (https://mpimet.mpg.de/cdi)
+##         Conventions: CF-1.6
+##         title: GEOS-Chem diagnostic collection: SpeciesConc
+##         history: Thu Jul 17 14:31:15 2025: cdo monmean GEOSChem.SpeciesConc.2012_2015.nc4 GEOSChem.SpeciesConc.2012_2015_m.nc4
+## Thu Jul 17 14:28:55 2025: cdo mergetime GEOSChem.SpeciesConc.20120101_0000z.nc4 GEOSChem.SpeciesConc.20120201_0000z.nc4 GEOSChem.SpeciesConc.20120301_0000z.nc4 GEOSChem.SpeciesConc.20120401_0000z.nc4 GEOSChem.SpeciesConc.20120501_0000z.nc4 GEOSChem.SpeciesConc.20120601_0000z.nc4 GEOSChem.SpeciesConc.20120701_0000z.nc4 GEOSChem.SpeciesConc.20120801_0000z.nc4 GEOSChem.SpeciesConc.20120901_0000z.nc4 GEOSChem.SpeciesConc.20121001_0000z.nc4 GEOSChem.SpeciesConc.20121101_0000z.nc4 GEOSChem.SpeciesConc.20121201_0000z.nc4 GEOSChem.SpeciesConc.20130101_0000z.nc4 GEOSChem.SpeciesConc.20130201_0000z.nc4 GEOSChem.SpeciesConc.20130301_0000z.nc4 GEOSChem.SpeciesConc.20130401_0000z.nc4 GEOSChem.SpeciesConc.20130501_0000z.nc4 GEOSChem.SpeciesConc.20130601_0000z.nc4 GEOSChem.SpeciesConc.20130701_0000z.nc4 GEOSChem.SpeciesConc.20130801_0000z.nc4 GEOSChem.SpeciesConc.20130901_0000z.nc4 GEOSChem.SpeciesConc.20131001_0000z.nc4 GEOSChem.SpeciesConc.20131101_0000z.nc4 GEOSChem.SpeciesConc.20131201_0000z.nc4 GEOSChem.SpeciesConc.20140101_0000z.nc4 GEOSChem.SpeciesConc.20140201_0000z.nc4 GEOSChem.SpeciesConc.20140301_0000z.nc4 GEOSChem.SpeciesConc.20140401_0000z.nc4 GEOSChem.SpeciesConc.20140501_0000z.nc4 GEOSChem.SpeciesConc.20140601_0000z.nc4 GEOSChem.SpeciesConc.20140701_0000z.nc4 GEOSChem.SpeciesConc.20140801_0000z.nc4 GEOSChem.SpeciesConc.20140901_0000z.nc4 GEOSChem.SpeciesConc.20141001_0000z.nc4 GEOSChem.SpeciesConc.20141101_0000z.nc4 GEOSChem.SpeciesConc.20141201_0000z.nc4 GEOSChem.SpeciesConc.20150101_0000z.nc4 GEOSChem.SpeciesConc.20150201_0000z.nc4 GEOSChem.SpeciesConc.20150301_0000z.nc4 GEOSChem.SpeciesConc.20150401_0000z.nc4 GEOSChem.SpeciesConc.20150501_0000z.nc4 GEOSChem.SpeciesConc.20150601_0000z.nc4 GEOSChem.SpeciesConc.20150701_0000z.nc4 GEOSChem.SpeciesConc.20150801_0000z.nc4 GEOSChem.SpeciesConc.20150901_0000z.nc4 GEOSChem.SpeciesConc.20151001_0000z.nc4 GEOSChem.SpeciesConc.20151101_0000z.nc4 GEOSChem.SpeciesConc.20151201_0000z.nc4 GEOSChem.SpeciesConc.2012_2015.nc4
+##         format: NetCDF-4
+##         conventions: COARDS
+##         ProdDateTime: 
+##         reference: www.geos-chem.org; wiki.geos-chem.org
+##         contact: GEOS-Chem Support Team (geos-chem-support@g.harvard.edu)
+##         simulation_start_date_and_time: 2012-01-01 00:00:00z
+##         simulation_end_date_and_time: 2013-01-01 00:00:00z
+##         frequency: mon
+##         CDO: Climate Data Operators version 2.1.1 (https://mpimet.mpg.de/cdo)</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>variable_names <span class="ot">&lt;-</span> <span class="fu">names</span>(conc_2012_2015<span class="sc">$</span>var)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">print</span>(variable_names)</span></code></pre></div>
+<pre><code>##  [1] &quot;time_bnds&quot;             &quot;lon_bnds&quot;              &quot;lat_bnds&quot;              &quot;lev_bnds&quot;             
+##  [5] &quot;AREA&quot;                  &quot;SpeciesConcVV_CH4&quot;     &quot;SpeciesConcVV_CO&quot;      &quot;SpeciesConcVV_ClO&quot;    
+##  [9] &quot;SpeciesConcVV_BrO&quot;     &quot;SpeciesConcVV_HO2&quot;     &quot;SpeciesConcVV_O3&quot;      &quot;SpeciesConcVV_NO&quot;     
+## [13] &quot;SpeciesConcVV_NO2&quot;     &quot;SpeciesConcVV_OH&quot;      &quot;SpeciesConcVV_Cl&quot;      &quot;SpeciesConcVV_Br&quot;     
+## [17] &quot;SpeciesConcVV_HgClO&quot;   &quot;SpeciesConcVV_HgBrO&quot;   &quot;SpeciesConcVV_HgOHO&quot;   &quot;SpeciesConcVV_PHg2Cl&quot; 
+## [21] &quot;SpeciesConcVV_PHg2OH&quot;  &quot;SpeciesConcVV_PHg2Br&quot;  &quot;SpeciesConcVV_PHg0&quot;    &quot;SpeciesConcVV_PHg2&quot;   
+## [25] &quot;SpeciesConcVV_Hg2STRP&quot; &quot;SpeciesConcVV_Hg2ORGP&quot; &quot;SpeciesConcVV_Hg2ClP&quot;  &quot;SpeciesConcVV_HgCl2&quot;  
+## [29] &quot;SpeciesConcVV_HgOHOH&quot;  &quot;SpeciesConcVV_HgOHBrO&quot; &quot;SpeciesConcVV_HgOHClO&quot; &quot;SpeciesConcVV_HgOHHO2&quot;
+## [33] &quot;SpeciesConcVV_HgOHNO2&quot; &quot;SpeciesConcVV_HgOH&quot;    &quot;SpeciesConcVV_HgClOH&quot;  &quot;SpeciesConcVV_HgClBr&quot; 
+## [37] &quot;SpeciesConcVV_HgClBrO&quot; &quot;SpeciesConcVV_HgClClO&quot; &quot;SpeciesConcVV_HgClHO2&quot; &quot;SpeciesConcVV_HgClNO2&quot;
+## [41] &quot;SpeciesConcVV_HgCl&quot;    &quot;SpeciesConcVV_HgBr2&quot;   &quot;SpeciesConcVV_HgBrOH&quot;  &quot;SpeciesConcVV_HgBrClO&quot;
+## [45] &quot;SpeciesConcVV_HgBrBrO&quot; &quot;SpeciesConcVV_HgBrHO2&quot; &quot;SpeciesConcVV_HgBrNO2&quot; &quot;SpeciesConcVV_HgBr&quot;   
+## [49] &quot;SpeciesConcVV_Hg0&quot;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">names</span>(conc_2012_2015<span class="sc">$</span>dim)       <span class="co"># pour les dimensions</span></span></code></pre></div>
+<pre><code>## [1] &quot;time&quot; &quot;bnds&quot; &quot;lon&quot;  &quot;lat&quot;  &quot;lev&quot;</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>species_hg <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgClO&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgBrO&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgOHO&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_PHg2Cl&quot;</span>, <span class="st">&quot;SpeciesConcVV_PHg2OH&quot;</span>, <span class="st">&quot;SpeciesConcVV_PHg2Br&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_PHg0&quot;</span>, <span class="st">&quot;SpeciesConcVV_PHg2&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_Hg2STRP&quot;</span>, <span class="st">&quot;SpeciesConcVV_Hg2ORGP&quot;</span>, <span class="st">&quot;SpeciesConcVV_Hg2ClP&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgCl2&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgOHOH&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgOHBrO&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgOHClO&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgOHHO2&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgOHNO2&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgOH&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgClOH&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgClBr&quot;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgClBrO&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgClClO&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgClHO2&quot;</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgClNO2&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgCl&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgBr2&quot;</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgBrOH&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgBrClO&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgBrBrO&quot;</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_HgBrHO2&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgBrNO2&quot;</span>, <span class="st">&quot;SpeciesConcVV_HgBr&quot;</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>  <span class="st">&quot;SpeciesConcVV_Hg0&quot;</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co"># === 4. Calcul masse totale Hg ===</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>mass_total <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="cf">for</span> (sp <span class="cf">in</span> species_hg) {</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Traitement de&quot;</span>, sp, <span class="st">&quot;...</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>  </span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>  conc <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(conc_2012_2015, sp)  <span class="co"># [lon, lat, lev, time]</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>  </span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(<span class="fu">dim</span>(conc)) <span class="sc">==</span> <span class="dv">4</span> <span class="sc">&amp;&amp;</span> <span class="fu">all</span>(<span class="fu">dim</span>(conc)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">==</span> <span class="fu">dim</span>(mean_Met_AD))) {</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>    nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(conc)[<span class="dv">4</span>]</span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nt) {</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>      mass_Hg_t <span class="ot">&lt;-</span> conc[,,,t] <span class="sc">*</span> mean_Met_AD <span class="sc">*</span> (M_Hg <span class="sc">/</span> M_air)  <span class="co"># kg</span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>      mass_total <span class="ot">&lt;-</span> mass_total <span class="sc">+</span> <span class="fu">sum</span>(mass_Hg_t, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a>    }</span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a>    <span class="fu">warning</span>(<span class="fu">paste</span>(<span class="st">&quot;Dimensions incompatibles pour&quot;</span>, sp))</span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a>  }</span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Traitement de SpeciesConcVV_HgClO ...
+## Traitement de SpeciesConcVV_HgBrO ...
+## Traitement de SpeciesConcVV_HgOHO ...
+## Traitement de SpeciesConcVV_PHg2Cl ...
+## Traitement de SpeciesConcVV_PHg2OH ...
+## Traitement de SpeciesConcVV_PHg2Br ...
+## Traitement de SpeciesConcVV_PHg0 ...
+## Traitement de SpeciesConcVV_PHg2 ...
+## Traitement de SpeciesConcVV_Hg2STRP ...
+## Traitement de SpeciesConcVV_Hg2ORGP ...
+## Traitement de SpeciesConcVV_Hg2ClP ...
+## Traitement de SpeciesConcVV_HgCl2 ...
+## Traitement de SpeciesConcVV_HgOHOH ...
+## Traitement de SpeciesConcVV_HgOHBrO ...
+## Traitement de SpeciesConcVV_HgOHClO ...
+## Traitement de SpeciesConcVV_HgOHHO2 ...
+## Traitement de SpeciesConcVV_HgOHNO2 ...
+## Traitement de SpeciesConcVV_HgOH ...
+## Traitement de SpeciesConcVV_HgClOH ...
+## Traitement de SpeciesConcVV_HgClBr ...
+## Traitement de SpeciesConcVV_HgClBrO ...
+## Traitement de SpeciesConcVV_HgClClO ...
+## Traitement de SpeciesConcVV_HgClHO2 ...
+## Traitement de SpeciesConcVV_HgClNO2 ...
+## Traitement de SpeciesConcVV_HgCl ...
+## Traitement de SpeciesConcVV_HgBr2 ...
+## Traitement de SpeciesConcVV_HgBrOH ...
+## Traitement de SpeciesConcVV_HgBrClO ...
+## Traitement de SpeciesConcVV_HgBrBrO ...
+## Traitement de SpeciesConcVV_HgBrHO2 ...
+## Traitement de SpeciesConcVV_HgBrNO2 ...
+## Traitement de SpeciesConcVV_HgBr ...
+## Traitement de SpeciesConcVV_Hg0 ...</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">💡 Masse totale de tout le Hg atmosphérique (2012–2015) :&quot;</span>, <span class="fu">format</span>(mass_total, <span class="at">scientific =</span> <span class="cn">TRUE</span>), <span class="st">&quot;kg</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## 💡 Masse totale de tout le Hg atmosphérique (2012–2015) : 1.71438e+08 kg</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># === 2. Temps (convertir temps GEOS-Chem en dates R) ===</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>time_vals <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(conc_2012_2015, <span class="st">&quot;time&quot;</span>)  <span class="co"># temps en heures depuis...</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>time_units <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(conc_2012_2015, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;units&quot;</span>)<span class="sc">$</span>value</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co"># Convertir les unités : &quot;hours since 2012-01-01 00:00:00&quot;</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>origin <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(<span class="fu">sub</span>(<span class="st">&quot;hours since &quot;</span>, <span class="st">&quot;&quot;</span>, time_units))</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>time_dates <span class="ot">&lt;-</span> origin <span class="sc">+</span> <span class="fu">hours</span>(time_vals)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">length</span>(time_dates)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>mass_by_month <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">date =</span> time_dates, <span class="at">mass_kg =</span> <span class="fu">rep</span>(<span class="dv">0</span>, nt))</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co"># === 3. Calcul de la masse totale pour chaque timestep ===</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="cf">for</span> (sp <span class="cf">in</span> species_hg) {</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Traitement de&quot;</span>, sp, <span class="st">&quot;...</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  conc <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(conc_2012_2015, sp)  <span class="co"># [lon, lat, lev, time]</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>  <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nt) {</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>    mass_Hg_t <span class="ot">&lt;-</span> conc[,,,t] <span class="sc">*</span> mean_Met_AD <span class="sc">*</span> (M_Hg <span class="sc">/</span> M_air)</span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>    mass_by_month<span class="sc">$</span>mass_kg[t] <span class="ot">&lt;-</span> mass_by_month<span class="sc">$</span>mass_kg[t] <span class="sc">+</span> <span class="fu">sum</span>(mass_Hg_t, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>  }</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Traitement de SpeciesConcVV_HgClO ...
+## Traitement de SpeciesConcVV_HgBrO ...
+## Traitement de SpeciesConcVV_HgOHO ...
+## Traitement de SpeciesConcVV_PHg2Cl ...
+## Traitement de SpeciesConcVV_PHg2OH ...
+## Traitement de SpeciesConcVV_PHg2Br ...
+## Traitement de SpeciesConcVV_PHg0 ...
+## Traitement de SpeciesConcVV_PHg2 ...
+## Traitement de SpeciesConcVV_Hg2STRP ...
+## Traitement de SpeciesConcVV_Hg2ORGP ...
+## Traitement de SpeciesConcVV_Hg2ClP ...
+## Traitement de SpeciesConcVV_HgCl2 ...
+## Traitement de SpeciesConcVV_HgOHOH ...
+## Traitement de SpeciesConcVV_HgOHBrO ...
+## Traitement de SpeciesConcVV_HgOHClO ...
+## Traitement de SpeciesConcVV_HgOHHO2 ...
+## Traitement de SpeciesConcVV_HgOHNO2 ...
+## Traitement de SpeciesConcVV_HgOH ...
+## Traitement de SpeciesConcVV_HgClOH ...
+## Traitement de SpeciesConcVV_HgClBr ...
+## Traitement de SpeciesConcVV_HgClBrO ...
+## Traitement de SpeciesConcVV_HgClClO ...
+## Traitement de SpeciesConcVV_HgClHO2 ...
+## Traitement de SpeciesConcVV_HgClNO2 ...
+## Traitement de SpeciesConcVV_HgCl ...
+## Traitement de SpeciesConcVV_HgBr2 ...
+## Traitement de SpeciesConcVV_HgBrOH ...
+## Traitement de SpeciesConcVV_HgBrClO ...
+## Traitement de SpeciesConcVV_HgBrBrO ...
+## Traitement de SpeciesConcVV_HgBrHO2 ...
+## Traitement de SpeciesConcVV_HgBrNO2 ...
+## Traitement de SpeciesConcVV_HgBr ...
+## Traitement de SpeciesConcVV_Hg0 ...</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># === 4. Agrégation par mois ===</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>mass_monthly <span class="ot">&lt;-</span> mass_by_month <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">floor_date</span>(date, <span class="st">&quot;month&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_mass_kg =</span> <span class="fu">sum</span>(mass_kg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># === 5. Plot ===</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="fu">ggplot</span>(mass_monthly, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> total_mass_kg <span class="sc">/</span> <span class="fl">1e6</span>)) <span class="sc">+</span>  <span class="co"># en mégagrammes (tonnes)</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Évolution mensuelle de la masse totale de mercure atmosphérique&quot;</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Date&quot;</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Masse totale de Hg (tonnes)&quot;</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Calculé à partir de toutes les espèces Hg GEOS-Chem&quot;</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="dv">1</span>),</span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+
+</body>
+</html>

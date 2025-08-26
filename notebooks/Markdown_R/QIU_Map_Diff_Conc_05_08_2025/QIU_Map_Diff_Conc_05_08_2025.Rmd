@@ -1,0 +1,687 @@
+---
+title: "QIU_Map_Diff_Conc_05_08_2025"
+author: "Martin Colomb"
+date: "`r Sys.Date()`"
+version: "R-4.4.2"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    code_folding: show
+---
+
+```{r chemins et fichiers}
+chem_hist_B100<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B100"
+chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
+chem_QIU <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/QIU"
+con_hg_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.SpeciesConc.2015_m.nc4"))
+statemet_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.StateMet.2015_m.nc4"))
+area<-ncvar_get(con_hg_B100, "AREA")
+
+Met_AIRDEN<-ncvar_get(statemet_B100, "Met_AIRDEN")  #Dry air density units: kg m-3
+range(Met_AIRDEN)
+dim(Met_AIRDEN)
+Met_AIRDEN <- Met_AIRDEN[, , 1, ]
+dim(Met_AIRDEN)
+
+
+time_raw <- ncvar_get(statemet_B100, "time")
+origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+time <- origin_time + time_raw * 60
+days_in_months <- days_in_month(time)
+weights <- days_in_months / sum(days_in_months)
+weighted_avg <- function(x) sum(x * weights)
+mean_Met_AIRDEN <- apply(Met_AIRDEN, MARGIN = c(1, 2), FUN = weighted_avg)
+max(mean_Met_AIRDEN) 
+
+
+
+
+s_in_yr = 365.2425 * 24 * 3600
+unit_conv = s_in_yr
+kg_Mg = 1e-3
+MW_Hg = 200.59
+avo = 6.02e23
+g_kg = 1e-3
+cm2_m2 = 1e4
+unit_conv_dd = MW_Hg / avo * g_kg * cm2_m2 * s_in_yr * area
+M_Hg <- 0.20059         # Masse molaire du Hg (kg/mol)
+M_air <- 0.028964       # Masse molaire de l'air sec (kg/mol)
+ng_per_kg <- 1e12       # Conversion kg → ng
+```
+
+
+```{r boucle simu cartes}
+
+# Paramètres généraux
+simulations <- c("V03A03", "V20A03", "V20A20", "V03A20") # 
+lon <- seq(-180, 180, length.out = 144)
+lat <- seq(-90, 90, length.out = 91)
+df_grid <- expand.grid(x = lon, y = lat)
+
+# Classes et couleurs pour l'affichage
+breaks_conc <- c(0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, Inf)
+labels_chr <- c(
+  "0.4–0.6", "0.6–0.8", "0.8–1.0", "1.0–1.2",
+  "1.2–1.4", "1.4–1.6", "1.6–1.8", "1.8–2.0", ">2.0"
+)
+labels_expr <- c(
+  expression("0.4–0.6"), expression("0.6–0.8"), expression("0.8–1.0"),
+  expression("1.0–1.2"), expression("1.2–1.4"), expression("1.4–1.6"),
+  expression("1.6–1.8"), expression("1.8–2.0"), expression("">"~2.0")
+)
+colors_conc <- c(
+  "#005F73", "#0A9396", "#94D2BD", "#E9D8A6",
+  "#EE9B00", "#CA6702", "#BB3E03", "#AE2012", "#9B2226"
+)
+
+
+plot_simulation_map <- function(conc_matrix, sim_name, save_path) {
+  df <- df_grid
+  df$conc_ng_m3 <- as.vector(conc_matrix)
+  df$conc_class <- cut(df$conc_ng_m3,
+                       breaks = breaks_conc,
+                       labels = labels_chr,
+                       include.lowest = TRUE)
+  df <- na.omit(df)
+  
+  plot <- ggplot(df, aes(x = x, y = y, fill = conc_class)) +
+    geom_raster() +
+    scale_fill_manual(
+      name = "Hg(0) (ng/m³)",
+      values = colors_conc,
+      labels = labels_expr,
+      na.value = "transparent",
+      guide = guide_legend(reverse = TRUE)
+    ) +
+    coord_equal() +
+    theme_minimal() +
+    labs(
+      title = "Annual Mean Atmospheric Hg(0) Concentration in 2015",
+      subtitle = paste0("Simulation : ", sim_name),
+      x = "Longitude", y = "Latitude"
+    ) +
+    borders("world", colour = "#403d39", size = 0.2) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      plot.subtitle = element_text(hjust = 0.5),
+      axis.text = element_text(size = 10),
+      axis.ticks = element_line(color = "black", size = 0.3),
+      axis.ticks.length = unit(3, "pt"),
+      panel.grid = element_blank(),
+      panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+      axis.line = element_blank(),
+      plot.background = element_rect(fill = "white", color = NA)
+    )
+  
+  ggsave(
+    filename = save_path,
+    plot = plot,
+    device = "pdf",
+    width = 10, height = 6, units = "in"
+  )
+}
+
+# Boucle principale
+for (sim in simulations) {
+  
+  # 1. Ouvrir le fichier
+  path_sim <- file.path(chem_QIU, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
+  nc_sim <- nc_open(path_sim)
+  
+  # 2. Extraire la concentration Hg0 au niveau 1
+  hg0_raw <- ncvar_get(nc_sim, "SpeciesConcVV_Hg0")[, , 1, ]
+  
+  # 3. Temps et poids mensuels
+  time_raw <- ncvar_get(nc_sim, "time")
+  origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+  time <- origin_time + time_raw * 60
+  weights <- days_in_month(time) / sum(days_in_month(time))
+  
+  # 4. Moyenne pondérée temporelle
+  weighted_avg <- function(x) sum(x * weights)
+  hg0_mean <- apply(hg0_raw, MARGIN = c(1, 2), FUN = weighted_avg)
+  
+  # 5. Conversion en ng/m³
+  hg0_ng_m3 <- hg0_mean * (M_Hg / M_air) * mean_Met_AIRDEN * ng_per_kg
+  
+  # 6. Sauvegarde du plot
+  save_path <- file.path(
+    "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot",
+    paste0("QIU_", sim, "_Conc_WORLD.pdf")
+  )
+  
+  plot_simulation_map(hg0_ng_m3, sim, save_path)
+  
+  # 7. Fermer NetCDF
+  nc_close(nc_sim)
+}
+
+```
+
+```{r Map concentration Hg0 2003 V03A03}
+
+conc_V03A03 <- nc_open(file.path(chem_QIU, "V03A03/GEOSChem.SpeciesConc.2015_m.nc4"))
+print(conc_V03A03)
+hg0_V03A03 <- ncvar_get(conc_V03A03, "SpeciesConcVV_Hg0") #mol mol-1 dry
+
+dim(hg0_V03A03) 
+hg0_V03A03 <- hg0_V03A03[, , 1, ]  # Prend le niveau 1, garde lon, lat, time
+
+time_raw <- ncvar_get(conc_V03A03, "time")
+origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+time <- origin_time + time_raw * 60
+days_in_months <- days_in_month(time)
+weights <- days_in_months / sum(days_in_months)
+weighted_avg <- function(x) sum(x * weights)
+hg0_V03A03 <- apply(hg0_V03A03, MARGIN = c(1, 2), FUN = weighted_avg)
+summary(as.vector(hg0_V03A03))
+
+
+dim(hg0_V03A03)#mol mol-1 dry
+dim(mean_Met_AIRDEN)#Dry air density units: kg m-3
+M_Hg         # Masse molaire du Hg (kg/mol)
+M_air        # Masse molaire de l'air sec (kg/mol)
+ng_per_kg    #kg -> ng (1e12)
+#Formule : hg0_V03A03 * (M_Hg/M_air) * mean_Met_AIRDEN  = 
+
+V03A03_ng_m3 <-   hg0_V03A03 * (M_Hg/M_air) * mean_Met_AIRDEN * ng_per_kg
+range(V03A03_ng_m3)
+dim(V03A03_ng_m3)
+
+
+lon <- seq(-180, 180, length.out = 144)
+lat <- seq(-90, 90, length.out = 91)
+df_conc <- expand.grid(x = lon, y = lat)
+df_conc$conc_ng_m3 <- as.vector(V03A03_ng_m3)
+breaks_conc <- c(0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, Inf)
+labels_chr <- c(
+  "0.4–0.6", "0.6–0.8", "0.8–1.0", "1.0–1.2",
+  "1.2–1.4", "1.4–1.6", "1.6–1.8", "1.8–2.0", ">2.0"
+)
+
+labels_expr <- c(
+  expression("0.4–0.6"), expression("0.6–0.8"), expression("0.8–1.0"),
+  expression("1.0–1.2"), expression("1.2–1.4"), expression("1.4–1.6"),
+  expression("1.6–1.8"), expression("1.8–2.0"), expression("">"~2.0")
+)
+
+colors_conc <- c(
+  "#005F73", "#0A9396", "#94D2BD", "#E9D8A6",
+  "#EE9B00", "#CA6702", "#BB3E03", "#AE2012", "#9B2226"
+)
+
+# Coupe selon les classes
+df_conc$conc_class <- cut(
+  df_conc$conc_ng_m3,
+  breaks = breaks_conc,
+  labels = labels_chr,
+  include.lowest = TRUE
+)
+
+# Supprimer les NA
+df_conc <- na.omit(df_conc)
+plot_conc <- ggplot(df_conc, aes(x = x, y = y, fill = conc_class)) +
+  geom_raster() +
+  scale_fill_manual(
+    name = "Hg(0) (ng/m³)",
+    values = colors_conc,
+    labels = labels_expr,
+    na.value = "transparent",
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  coord_equal() +
+  theme_minimal() +
+  labs(
+    title = "Annual Mean Atmospheric Hg(0) Concentration in 2015",
+    subtitle = "Simulation : Vegetation 2003 / Emissions QIU 2003",
+    x = "Longitude", y = "Latitude"
+  ) +
+  borders("world", colour = "#403d39", size = 0.2) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+plot_conc
+
+
+
+
+```
+
+```{r Map concentration 2020}
+conc_V20A20 <- nc_open(file.path(chem_QIU, "V20A20/GEOSChem.SpeciesConc.2015_m.nc4"))
+print(conc_V20A20)
+hg0_V20A20 <- ncvar_get(conc_V20A20, "SpeciesConcVV_Hg0") #mol mol-1 dry
+
+dim(hg0_V20A20) 
+hg0_V20A20 <- hg0_V20A20[, , 1, ]  # Prend le niveau 1, garde lon, lat, time
+
+time_raw <- ncvar_get(conc_V20A20, "time")
+origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+time <- origin_time + time_raw * 60
+days_in_months <- days_in_month(time)
+weights <- days_in_months / sum(days_in_months)
+weighted_avg <- function(x) sum(x * weights)
+hg0_V20A20 <- apply(hg0_V20A20, MARGIN = c(1, 2), FUN = weighted_avg)
+summary(as.vector(hg0_V20A20))
+
+
+dim(hg0_V20A20)#mol mol-1 dry
+dim(mean_Met_AIRDEN)#Dry air density units: kg m-3
+M_Hg         # Masse molaire du Hg (kg/mol)
+M_air        # Masse molaire de l'air sec (kg/mol)
+ng_per_kg    #kg -> ng (1e12)
+#Formule : hg0_V20A20 * (M_Hg/M_air) * mean_Met_AIRDEN  = 
+
+V20A20_ng_m3 <-   hg0_V20A20 * (M_Hg/M_air) * mean_Met_AIRDEN * ng_per_kg
+range(V20A20_ng_m3)
+dim(V20A20_ng_m3)
+
+
+lon <- seq(-180, 180, length.out = 144)
+lat <- seq(-90, 90, length.out = 91)
+df_conc <- expand.grid(x = lon, y = lat)
+df_conc$conc_ng_m3 <- as.vector(V20A20_ng_m3)
+breaks_conc <- c(0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, Inf)
+labels_chr <- c(
+  "0.4–0.6", "0.6–0.8", "0.8–1.0", "1.0–1.2",
+  "1.2–1.4", "1.4–1.6", "1.6–1.8", "1.8–2.0", ">2.0"
+)
+
+labels_expr <- c(
+  expression("0.4–0.6"), expression("0.6–0.8"), expression("0.8–1.0"),
+  expression("1.0–1.2"), expression("1.2–1.4"), expression("1.4–1.6"),
+  expression("1.6–1.8"), expression("1.8–2.0"), expression("">"~2.0")
+)
+
+colors_conc <- c(
+  "#005F73", "#0A9396", "#94D2BD", "#E9D8A6",
+  "#EE9B00", "#CA6702", "#BB3E03", "#AE2012", "#9B2226"
+)
+
+# Coupe selon les classes
+df_conc$conc_class <- cut(
+  df_conc$conc_ng_m3,
+  breaks = breaks_conc,
+  labels = labels_chr,
+  include.lowest = TRUE
+)
+
+# Supprimer les NA
+df_conc <- na.omit(df_conc)
+plot_conc <- ggplot(df_conc, aes(x = x, y = y, fill = conc_class)) +
+  geom_raster() +
+  scale_fill_manual(
+    name = "Hg(0) (ng/m³)",
+    values = colors_conc,
+    labels = labels_expr,
+    na.value = "transparent",
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  coord_equal() +
+  theme_minimal() +
+  labs(
+    title = "Annual Mean Atmospheric Hg(0) Concentration in 2015",
+    subtitle = "Simulation : Vegetation 2020 / Emissions QIU 2020",
+    x = "Longitude", y = "Latitude"
+  ) +
+  borders("world", colour = "#403d39", size = 0.2) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+plot_conc
+
+```
+
+```{r diff 2003 2020 WORLD}
+
+range(V20A20_ng_m3)
+range(V03A03_ng_m3)
+
+diff03_20<- V20A20_ng_m3 - V03A03_ng_m3 #ng/m3
+
+range(diff03_20)
+
+lon <- seq(-180, 180, length.out = 144)
+lat <- seq(-90, 90, length.out = 91)
+df_diff <- expand.grid(x = lon, y = lat)
+df_diff$diff_conc <- as.vector(diff03_20)
+
+df_diff <- na.omit(df_diff)
+colors_div <- c("#2166AC", "#FFFFFF", "#B2182B")  # bleu - blanc - rouge
+
+plot_diff <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
+  geom_raster() +
+  scale_fill_gradient2(
+    name = "Différence Hg(0) (ng/m³)\n2020 - 2003",
+    low = colors_div[1],
+    mid = colors_div[2],
+    high = colors_div[3],
+    midpoint = 0,
+    limits = c(-max(abs(df_diff$diff_conc)), max(abs(df_diff$diff_conc))),
+    oob = scales::squish
+  ) +
+  coord_equal() +
+  theme_minimal() +
+  labs(
+    title = "Différence annuelle moyenne Hg(0) atmosphérique (2020 - 2003)",
+    x = "Longitude", y = "Latitude"
+  ) +
+  borders("world", colour = "#403d39", size = 0.2) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+plot_diff
+
+
+
+lim <- 0.5
+plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
+  geom_raster() +
+  scale_fill_gradient2(
+    name = "Différence Hg(0) (ng/m³)\n2020 - 2003",
+    low = colors_div[1],
+    mid = colors_div[2],
+    high = colors_div[3],
+    midpoint = 0,
+    limits = c(-lim, lim),
+    oob = scales::squish
+  ) +
+  coord_equal() +
+  theme_minimal() +
+  labs(
+    title = paste0("Average annual difference of Hg(0) between 2020 and 2003"),
+        subtitle = "Dataset : QIU",
+    x = "Longitude", y = "Latitude"
+  ) +
+  borders("world", colour = "#403d39", size = 0.2) +
+   theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+plot_diff_zoom
+
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/QIU_diff_20_03_Conc_WORLD.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_diff_zoom,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
+```
+
+```{r Amazon mask}
+
+nc_mask<-nc_open(file.path("C:/Users/colom/Desktop/STAGE/data/clean_mod_data", "Amazon_basin_mask_2x25.nc"))
+Am_mask<-ncvar_get(nc_mask, "MASK")
+
+dim(Am_mask)
+range(Am_mask)
+df_amazon <- expand.grid(
+  x = lon,  # tes longitudes
+  y = lat   # tes latitudes
+) %>%
+  mutate(mask = as.vector(Am_mask))
+
+
+plot_mask<-ggplot(df_amazon, aes(x = x, y = y, fill = factor(mask))) +
+  geom_raster(na.rm = TRUE) +
+  scale_fill_manual(
+    values = c("0" = "transparent", "1" = "#0077BB"),
+    labels = c("1" = "Amazon"),
+    name = "Mask",
+    na.value = "transparent"
+  ) +
+  borders("world", colour = "black", size = 0.3) +
+  coord_quickmap(xlim = c(-85, -30), ylim = c(-60, 15)) +
+  theme_minimal() +
+  labs(
+    title = "Amazon region mask",
+    x = "Longitude", y = "Latitude"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.position = "right",
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.6),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+print(plot_mask)
+
+
+```
+
+```{r Focus amazonie}
+
+lim <- 0.2
+plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
+  geom_raster() +
+  scale_fill_gradient2(
+    name = "Difference Hg(0) (ng/m³)\n2020 - 2003",
+    low = colors_div[1],
+    mid = colors_div[2],
+    high = colors_div[3],
+    midpoint = 0,
+    limits = c(-lim, lim),
+    oob = scales::squish
+  ) +
+  coord_equal() +
+  coord_quickmap(xlim = c(-85, -30), ylim = c(-60, 15)) +
+
+  theme_minimal() +
+  labs(
+    title = paste0("Average annual difference of Hg(0) between 2020 and 2003"),
+        subtitle = "Dataset : QIU - Latin America focus",
+    x = "Longitude", y = "Latitude"
+  ) +
+  borders("world", colour = "#403d39", size = 0.2) +
+   theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+plot_diff_zoom
+
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/QIU_Mean_annual_difference_amazonia.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_diff_zoom,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
+
+```
+
+```{r calcul contrib vegetation}
+simulations <- c("V03A03", "V03A20", "V20A03", "V20A20")
+
+results_amz <- list()
+
+for (sim in simulations) {
+  
+  # 1. Ouvrir le fichier NetCDF
+  path_sim <- file.path(chem_QIU, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
+  nc_sim <- nc_open(path_sim)
+  
+  # 2. Lire la variable Hg0 (niveau 1)
+  hg0 <- ncvar_get(nc_sim, "SpeciesConcVV_Hg0")[, , 1, ]
+  
+  # 3. Gérer le temps et pondérer
+  time_raw <- ncvar_get(nc_sim, "time")
+  origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+  time <- origin_time + time_raw * 60
+  weights <- days_in_month(time) / sum(days_in_month(time))
+  
+  # 4. Moyenne pondérée temporelle
+  weighted_avg <- function(x) sum(x * weights)
+  hg0_mean <- apply(hg0, MARGIN = c(1, 2), FUN = weighted_avg)
+  
+  # 5. Conversion en ng/m³
+  hg0_ng_m3 <- hg0_mean * (M_Hg / M_air) * mean_Met_AIRDEN * ng_per_kg
+  
+  # 6. Appliquer le masque Amazonie
+  hg0_amz <- hg0_ng_m3 * Am_mask
+  
+  # 7. Stocker le résultat
+  results_amz[[sim]] <- hg0_amz
+  
+  # Fermer le fichier
+  nc_close(nc_sim)
+}
+
+# Résultat : une liste results_amz avec 4 objets nommés :
+# results_amz$V03A03, results_amz$V03A20, etc.
+V03A03_am <- results_amz[["V03A03"]]
+V03A20_am <- results_amz[["V03A20"]]
+V20A03_am <- results_amz[["V20A03"]]
+V20A20_am <- results_amz[["V20A20"]]
+
+range(V03A03_am)
+range(V03A20_am)
+range(V20A03_am)
+range(V20A20_am)
+
+#1. Décomposition spatiale : SCREEN DANS DOCS GEOSCHEM
+Eff_A <- 0.5 * ((V03A20_am - V03A03_am) + (V20A20_am - V20A03_am))
+Eff_V <- 0.5 * ((V20A03_am - V03A03_am) + (V20A20_am - V03A20_am))
+Interaction <- V20A20_am - V03A03_am - Eff_A - Eff_V
+
+#2. Extraction des valeurs sur l'Amazonie uniquement :
+
+Eff_A_amz <- Eff_A[Am_mask == 1]
+Eff_V_amz <- Eff_V[Am_mask == 1]
+Interaction_amz <- Interaction[Am_mask == 1]
+
+#3. Moyennes régionales :
+mean_A <- mean(Eff_A_amz, na.rm = TRUE)
+mean_V <- mean(Eff_V_amz, na.rm = TRUE)
+mean_I <- mean(Interaction_amz, na.rm = TRUE)
+
+#4. Camembert avec interaction répartie :
+total_A <- mean_A + 0.5 * mean_I
+total_V <- mean_V + 0.5 * mean_I
+total_sum <- total_A + total_V
+
+contrib <- c(
+  Emissions = 100 * total_A / total_sum,
+  Végétation  = 100 * total_V / total_sum
+)
+
+
+
+df <- data.frame(
+  source = names(contrib),
+  pct = contrib
+)
+
+df$label <- paste0(df$source, "\n", sprintf("%.1f", df$pct), "%")
+
+contrib_conc<-ggplot(df, aes(x = "", y = pct, fill = source)) +
+  geom_col(width = 1, color = "white") +
+  geom_text(aes(label = label), 
+            position = position_stack(vjust = 0.5), 
+            color = "white", size = 5, fontface = "bold") +
+  coord_polar("y") +
+  scale_fill_manual(values = c("#D95F02", "#1B9E77")) +
+  labs(
+    title = "Relative contribution to the change in Hg(0) concentration",
+    subtitle = "Dataset : QIU / Amazonia forest focus",
+    fill = "Source"
+  ) +
+  theme_void() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+print(contrib_conc)
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/QIU_Contrib_Conc.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = contrib_conc,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,449 @@
+---
+title: "EDGAR_dep_test_map_25_08_2025"
+author: "Martin Colomb"
+date: "`r Sys.Date()`"
+version: "R-4.4.2"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    code_folding: show
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Chargement des packages
+
+```{r packages}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(tidyverse)
+library(patchwork)
+library(ncdf4)
+library(stringr)
+library(tibble)
+library(writexl)
+
+```
+
+
+```{r chemins et fichiers}
+chem_hist_B100<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B100"
+chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
+chem_EDGAR <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/EDGAR"
+con_hg_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.SpeciesConc.2015_m.nc4"))
+statemet_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.StateMet.2015_m.nc4"))
+area<-ncvar_get(con_hg_B100, "AREA")
+
+Met_AIRDEN<-ncvar_get(statemet_B100, "Met_AIRDEN")  #Dry air density units: kg m-3
+range(Met_AIRDEN)
+dim(Met_AIRDEN)
+Met_AIRDEN <- Met_AIRDEN[, , 1, ]
+dim(Met_AIRDEN)
+
+
+time_raw <- ncvar_get(statemet_B100, "time")
+origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+time <- origin_time + time_raw * 60
+days_in_months <- days_in_month(time)
+weights <- days_in_months / sum(days_in_months)
+weighted_avg <- function(x) sum(x * weights)
+mean_Met_AIRDEN <- apply(Met_AIRDEN, MARGIN = c(1, 2), FUN = weighted_avg)
+max(mean_Met_AIRDEN) 
+
+nc_mask<-nc_open(file.path("C:/Users/colom/Desktop/STAGE/data/clean_mod_data", "Amazon_basin_mask_2x25.nc"))
+Am_mask<-ncvar_get(nc_mask, "MASK")
+
+
+
+s_in_yr = 365.2425 * 24 * 3600
+unit_conv = s_in_yr
+kg_Mg = 1e-3
+MW_Hg = 200.59
+avo = 6.02e23
+g_kg = 1e-3
+cm2_m2 = 1e4
+unit_conv_dd = MW_Hg / avo * g_kg * cm2_m2 * s_in_yr * area
+M_Hg <- 0.20059         # Masse molaire du Hg (kg/mol)
+M_air <- 0.028964       # Masse molaire de l'air sec (kg/mol)
+ng_per_kg <- 1e12       # Conversion kg → ng
+```
+
+```{r contrib drydep amz}
+
+
+simulations <- c("V03A03", "V03A20", "V20A03", "V20A20")
+
+results_amz <- list()
+
+for (sim in simulations) {
+  
+  # 1. Ouvrir le fichier NetCDF
+  path_sim <- file.path(chem_EDGAR, sim, "GEOSChem.DryDep.2015_m.nc4")
+  nc_sim <- nc_open(path_sim)
+  
+  # 2. Lire la variable Hg0 (niveau 1)
+dep_Hg2<- ncvar_get(nc_sim, "DryDep_Hg2")
+dep_HgP<- ncvar_get(nc_sim, "DryDep_HgP")
+dep_Hg0<- ncvar_get(nc_sim, "DryDep_Hg0")
+  
+  
+  
+  # 3. Gérer le temps et pondérer
+  time_raw <- ncvar_get(nc_sim, "time")
+  origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+  time <- origin_time + time_raw * 60
+  weights <- days_in_month(time) / sum(days_in_month(time))
+  
+  # 4. Moyenne pondérée temporelle
+  weighted_avg <- function(x) sum(x * weights)
+  dep_Hg2_mean <- apply(dep_Hg2, MARGIN = c(1, 2), FUN = weighted_avg)
+  dep_HgP_mean <- apply(dep_HgP, MARGIN = c(1, 2), FUN = weighted_avg)
+  dep_Hg0_mean <- apply(dep_Hg0, MARGIN = c(1, 2), FUN = weighted_avg)
+  
+  
+  # 5. Conversion en MG/an
+  dep_total_mg_contrib <-(dep_Hg2_mean+dep_HgP_mean+dep_Hg0_mean) * unit_conv_dd * kg_Mg  # Conversion kg/s → Mg/an
+  
+  # 6. Appliquer le masque Amazonie
+  dep_total_mg_contrib_amz <- dep_total_mg_contrib * Am_mask
+  
+  # 7. Stocker le résultat
+  results_amz[[sim]] <- dep_total_mg_contrib_amz
+  
+  # Fermer le fichier
+  nc_close(nc_sim)
+}
+
+
+# Résultat : une liste results_amz avec 4 objets nommés :
+# results_amz$V03A03, results_amz$V03A20, etc.
+V03A03_am <- results_amz[["V03A03"]]
+V03A20_am <- results_amz[["V03A20"]]
+V20A03_am <- results_amz[["V20A03"]]
+V20A20_am <- results_amz[["V20A20"]]
+
+range(V03A03_am)
+range(V03A20_am)
+range(V20A03_am)
+range(V20A20_am)
+
+#1. Décomposition spatiale : SCREEN DANS DOCS GEOSCHEM
+Eff_A <- 0.5 * ((V03A20_am - V03A03_am) + (V20A20_am - V20A03_am))
+Eff_V <- 0.5 * ((V20A03_am - V03A03_am) + (V20A20_am - V03A20_am))
+Interaction <- V20A20_am - V03A03_am - Eff_A - Eff_V
+
+#2. Extraction des valeurs sur l'Amazonie uniquement :
+
+Eff_A_amz <- Eff_A   # [Am_mask == 1]
+Eff_V_amz <- Eff_V   # [Am_mask == 1]
+Interaction_amz <- Interaction # [Am_mask == 1]
+
+
+#3. Moyennes régionales :
+mean_A <- mean(Eff_A_amz, na.rm = TRUE)
+mean_V <- mean(Eff_V_amz, na.rm = TRUE)
+mean_I <- mean(Interaction_amz, na.rm = TRUE)
+
+#4. Camembert avec interaction répartie :
+total_A <- mean_A + 0.5 * mean_I
+total_V <- mean_V + 0.5 * mean_I
+total_sum <- total_A + total_V
+
+contrib <- c(
+  Emissions = 100 * total_A / total_sum,
+  Végétation  = 100 * total_V / total_sum
+)
+
+
+
+
+
+lon <- seq(-180, 180, length.out = 144)
+lat <- seq(-90, 90, length.out = 91)
+df_A <- expand.grid(lon = lon, lat = lat)
+df_A$Eff_A <- as.vector(Eff_A)
+df_V <- expand.grid(lon = lon, lat = lat)
+df_V$Eff_V <- as.vector(Eff_V)
+
+# 
+# # 2. Carte Eff_A
+# p_A <- ggplot(df_A, aes(x = lon, y = lat, fill = Eff_A)) +
+#   geom_raster(interpolate = FALSE) +
+#   borders("world", colour = "#403d39", size = 0.2) +
+#   coord_equal() +
+#   scale_fill_viridis_c(option = "plasma", name = "Eff_A (Mg/yr)") +
+#   theme_minimal() +
+#   labs(
+#     title = "Average annual difference of Hg drydep total (Emissions effect)",
+#     subtitle = "Dataset : EDGAR",
+#     x = "Longitude", y = "Latitude"
+#   ) +
+#   theme(
+#     plot.title = element_text(hjust = 0.5, face = "bold"),
+#     plot.subtitle = element_text(hjust = 0.5),
+#     axis.text = element_text(size = 10),
+#     axis.ticks = element_line(color = "black", size = 0.3),
+#     axis.ticks.length = unit(3, "pt"),
+#     panel.grid = element_blank(),
+#     panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+#     axis.line = element_blank(),
+#     plot.background = element_rect(fill = "white", color = NA)
+#   )
+# 
+# p_V <- ggplot(df_V, aes(x = lon, y = lat, fill = Eff_V)) +
+#   geom_raster(interpolate = FALSE) +
+#   borders("world", colour = "#403d39", size = 0.2) +
+#   coord_equal(xlim = c(-100, -25), ylim = c(-40, 20)) +   # zoom Amazonie
+#   scale_fill_gradient2(
+#     low = "#2166ac",   # bleu pour valeurs négatives
+#     mid = "white",     # blanc autour de zéro
+#     high = "#b2182b",  # rouge pour valeurs positives
+#     midpoint = 0,
+#     name = "Eff_V (Mg/yr)"
+#   ) +
+#   theme_minimal() +
+#   labs(
+#     title = "Average annual difference of Hg drydep total (Vegetation effect)",
+#     subtitle = "Dataset : EDGAR / Focus : Amazonia",
+#     x = "Longitude", y = "Latitude"
+#   ) +
+#   theme(
+#     plot.title = element_text(hjust = 0.5, face = "bold"),
+#     plot.subtitle = element_text(hjust = 0.5),
+#     axis.text = element_text(size = 10),
+#     axis.ticks = element_line(color = "black", size = 0.3),
+#     axis.ticks.length = unit(3, "pt"),
+#     panel.grid = element_blank(),
+#     panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+#     axis.line = element_blank(),
+#     plot.background = element_rect(fill = "white", color = NA)
+#   )
+# 
+# p_V
+# # 4. Afficher côte à côte
+# p_A + p_V
+
+
+# Fusionner les deux dataframes en un seul
+df_all <- bind_rows(
+  df_A %>% rename(Value = Eff_A) %>% mutate(Source = "Émissions"),
+  df_V %>% rename(Value = Eff_V) %>% mutate(Source = "Végétation")
+)
+
+# Carte unique avec facet_wrap
+p_all <- ggplot(df_all, aes(x = lon, y = lat, fill = Value)) +
+  geom_raster() +
+  borders("world", colour = "#403d39", size = 0.2) +
+  coord_quickmap(xlim = c(-100, -25), ylim = c(-40, 20)) +   # zoom Amazonie
+  scale_fill_gradient2(
+    low = "#2166ac", mid = "white", high = "#b2182b",
+    midpoint = 0, name = "Contribution (Mg/yr)"
+  ) +
+  facet_wrap(~Source) +
+  theme_minimal() +
+  labs(
+    title = "Contribution relative à la déposition sèche de Hg",
+    subtitle = "Amazonie - Effet Émissions vs Effet Végétation",
+    x = "Longitude", y = "Latitude"
+  )
+
+p_all
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+```{r contrib drydep amz}
+
+simulations <- c("V03A03", "V03A20", "V20A03", "V20A20")
+
+results_amz <- list()
+
+for (sim in simulations) {
+  
+  # 1. Ouvrir le fichier NetCDF
+  path_sim <- file.path(chem_EDGAR, sim, "GEOSChem.DryDep.2015_m.nc4")
+  nc_sim <- nc_open(path_sim)
+  
+  # 2. Lire la variable Hg0 (niveau 1)
+dep_Hg2<- ncvar_get(nc_sim, "DryDep_Hg2")
+dep_HgP<- ncvar_get(nc_sim, "DryDep_HgP")
+dep_Hg0<- ncvar_get(nc_sim, "DryDep_Hg0")
+  
+  
+  
+  # 3. Gérer le temps et pondérer
+  time_raw <- ncvar_get(nc_sim, "time")
+  origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+  time <- origin_time + time_raw * 60
+  weights <- days_in_month(time) / sum(days_in_month(time))
+  
+  # 4. Moyenne pondérée temporelle
+  weighted_avg <- function(x) sum(x * weights)
+  dep_Hg2_mean <- apply(dep_Hg2, MARGIN = c(1, 2), FUN = weighted_avg)
+  dep_HgP_mean <- apply(dep_HgP, MARGIN = c(1, 2), FUN = weighted_avg)
+  dep_Hg0_mean <- apply(dep_Hg0, MARGIN = c(1, 2), FUN = weighted_avg)
+  
+  
+  # 5. Conversion en MG/an
+  dep_total_mg_contrib <-(dep_Hg2_mean+dep_HgP_mean+dep_Hg0_mean) * unit_conv_dd * kg_Mg  # Conversion kg/s → Mg/an
+  
+  # 6. Appliquer le masque Amazonie
+  dep_total_mg_contrib_amz <- dep_total_mg_contrib * Am_mask
+  
+  # 7. Stocker le résultat
+  results_amz[[sim]] <- dep_total_mg_contrib_amz
+  
+  # Fermer le fichier
+  nc_close(nc_sim)
+}
+
+
+# Résultat : une liste results_amz avec 4 objets nommés :
+# results_amz$V03A03, results_amz$V03A20, etc.
+V03A03_am <- results_amz[["V03A03"]]
+V03A20_am <- results_amz[["V03A20"]]
+V20A03_am <- results_amz[["V20A03"]]
+V20A20_am <- results_amz[["V20A20"]]
+
+range(V03A03_am)
+range(V03A20_am)
+range(V20A03_am)
+range(V20A20_am)
+
+#1. Décomposition spatiale : SCREEN DANS DOCS GEOSCHEM
+Eff_A <- 0.5 * ((V03A20_am - V03A03_am) + (V20A20_am - V20A03_am))
+Eff_V <- 0.5 * ((V20A03_am - V03A03_am) + (V20A20_am - V03A20_am))
+Interaction <- V20A20_am - V03A03_am - Eff_A - Eff_V
+
+#2. Extraction des valeurs sur l'Amazonie uniquement :
+
+
+
+#3. Moyennes régionales :
+mean_A <- mean(Eff_A, na.rm = TRUE)
+mean_V <- mean(Eff_V, na.rm = TRUE)
+mean_I <- mean(Interaction, na.rm = TRUE)
+
+#4. Camembert avec interaction répartie :
+total_A <- mean_A + 0.5 * mean_I
+total_V <- mean_V + 0.5 * mean_I
+total_sum <- total_A + total_V
+
+contrib <- c(
+  Emissions = 100 * total_A / total_sum,
+  Végétation  = 100 * total_V / total_sum
+)
+
+
+
+
+
+lon <- seq(-180, 180, length.out = 144)
+lat <- seq(-90, 90, length.out = 91)
+df_A <- expand.grid(lon = lon, lat = lat)
+df_A$Eff_A <- as.vector(Eff_A)
+df_V <- expand.grid(lon = lon, lat = lat)
+df_V$Eff_V <- as.vector(Eff_V)
+
+
+# 2. Carte Eff_A
+p_A <- ggplot(df_A, aes(x = lon, y = lat, fill = Eff_A)) +
+  geom_raster(interpolate = FALSE) +
+  borders("world", colour = "#403d39", size = 0.2) +
+  coord_equal() +
+  scale_fill_viridis_c(option = "plasma", name = "Eff_A (Mg/yr)") +
+  theme_minimal() +
+  labs(
+    title = "Average annual difference of Hg drydep total (Emissions effect)",
+    subtitle = "Dataset : EDGAR",
+    x = "Longitude", y = "Latitude"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+p_V <- ggplot(df_V, aes(x = lon, y = lat, fill = Eff_V)) +
+  geom_raster(interpolate = FALSE) +
+  borders("world", colour = "#403d39", size = 0.2) +
+  coord_equal(xlim = c(-100, -25), ylim = c(-40, 20)) +   # zoom Amazonie
+  scale_fill_gradient2(
+    low = "#2166ac",   # bleu pour valeurs négatives
+    mid = "white",     # blanc autour de zéro
+    high = "#b2182b",  # rouge pour valeurs positives
+    midpoint = 0,
+    name = "Eff_V (Mg/yr)"
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Average annual difference of Hg drydep total (Vegetation effect)",
+    subtitle = "Dataset : EDGAR",
+    x = "Longitude", y = "Latitude"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+p_V
+# 4. Afficher côte à côte
+p_A + p_V
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
