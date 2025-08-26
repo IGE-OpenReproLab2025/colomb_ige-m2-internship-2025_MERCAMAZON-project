@@ -73,14 +73,30 @@ create_df_conc <- function(matrix_conc, lon, lat) {
     mutate(conc = as.vector(matrix_conc))
 }
 
-plot_concentration_map <- function(df, title, ref_data = NULL, limits = c(0, 5)) {
+plot_concentration_map <- function(df, title, subtitle, ref_data = NULL, limits = c(0, 5)) {
   p <- ggplot(df, aes(x = lon, y = lat, fill = conc)) +
-    geom_raster() +
-    scale_fill_viridis_c(option = "magma", name = "Hg⁰ (ng/m³)", direction = -1, limits = limits) +
-    coord_fixed() +
-    labs(title = title, x = "Longitude", y = "Latitude") +
-    borders("world", colour = "black") +
-    theme_minimal()
+  geom_raster() +
+  scale_fill_viridis_c(option = "magma", name = "Hg⁰ (ng/m³)", direction = -1, limits = limits) +
+  coord_fixed() +
+  labs(title = title, subtitle = subtitle, x = "Longitude", y = "Latitude") +
+  borders("world", colour = "black") +
+  theme_minimal() +
+  borders("world", colour = "#161a1d", size = 0.1) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text = element_text(size = 10),
+    axis.ticks = element_line(color = "black", size = 0.3),
+    axis.ticks.length = unit(3, "pt"),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    axis.line = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+  
+  
+  
+  
   if (!is.null(ref_data)) {
     p <- p + geom_point(data = ref_data, aes(x = Lon, y = Lat, fill = Hg0),
                         size = 3, shape = 21, inherit.aes = FALSE)
@@ -101,7 +117,7 @@ lat <- seq(-90, 90, length.out = 91)
 ```{r concentration_martin, echo=TRUE}
 conc_martin <- load_hg0_conc(file.path(chem_martin, "GEOSChem.SpeciesConc.2015_m.nc4"), "SpeciesConcVV_Hg0", weights)
 df_martin <- create_df_conc(conc_martin, lon, lat)
-plot_martin <- plot_concentration_map(df_martin, "Concentration de Hg⁰ modélisée (Martin) pour l'année 2015", limits = c(0, 4))
+plot_martin <- plot_concentration_map(df_martin, "Concentration de Hg⁰ modélisée pour l'année 2015","Modeling : Martin", limits = c(0, 4))
 plot_martin
 ```
 
@@ -110,7 +126,7 @@ plot_martin
 ```{r concentration_feinberg, echo=TRUE}
 conc_feinberg <- load_hg0_conc(file.path(chem_feinberg, "Feinberg_GEOSChem.SpeciesConc.2015_m.nc4"), "SpeciesConc_Hg0", weights)
 df_feinberg <- create_df_conc(conc_feinberg, lon, lat)
-plot_feinberg <- plot_concentration_map(df_feinberg, "Concentration de Hg⁰ modélisée (Feinberg) pour l'année 2015", limits = c(0, 5))
+plot_feinberg <- plot_concentration_map(df_feinberg, "Concentration de Hg⁰ modélisée pour l'année 2015", "Modeling : Feinberg",limits = c(0, 5))
 plot_feinberg
 ```
 
@@ -129,16 +145,37 @@ ref_hg0 <- ref_hg0[-1, ] %>%
 
 ```{r martin_vs_ref, echo=TRUE}
 plot_martin_ref <- plot_concentration_map(df_martin,
-  "Concentration de Hg⁰ (Martin) vs références pour l'année 2015",
-  ref_data = ref_hg0, limits = c(0, 4))
+  "Annual Hg(0) concentrations in 2015 vs reference", "Modeling : Martin",
+  ref_data = ref_hg0, limits = c(0, 5))
 plot_martin_ref
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/martin_mod_vs_ref.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_martin_ref,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
 ```
 
 # Plot concentrations Feinberg vs ref
 
 ```{r feinberg_vs_ref, echo=TRUE}
 plot_feinberg_ref <- plot_concentration_map(df_feinberg,
-  "Concentration de Hg⁰ (Feinberg) vs références pour l'année 2015",
+  "Annual Hg(0) concentrations in 2015 vs reference", "Modeling : Feinberg",
   ref_data = ref_hg0, limits = c(0, 5))
 plot_feinberg_ref
+
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/feinberg_mod_vs_ref.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_feinberg_ref,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
 ```

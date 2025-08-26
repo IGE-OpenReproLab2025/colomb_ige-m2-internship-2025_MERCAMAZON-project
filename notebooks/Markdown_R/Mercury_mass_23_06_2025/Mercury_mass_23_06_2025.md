@@ -1,7 +1,7 @@
 Mercury mass in atmosphere
 ================
 Martin Colomb
-2025-07-03
+2025-08-26
 
 # Chargement des packages
 
@@ -22,6 +22,7 @@ chem_hist_B100<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B1
 chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
 con_hg_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.SpeciesConc.2015_m.nc4"))
 statemet_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.StateMet.2015_m.nc4"))
+area<-ncvar_get(con_hg_B100, "AREA")
 
 conc_hg0<-ncvar_get(con_hg_B100, "SpeciesConcVV_Hg0") #Concentration of species Hg0 (mol mol-1 dry)
 
@@ -31,7 +32,9 @@ area<-ncvar_get(con_hg_B100, "AREA")
 M_Hg <- 0.20059
 M_air <- 0.028964
 kg_Mg  <- 1e-3     # conversion en tonnes
+avo = 6.02e23
 s_in_yr <- 365 * 24 * 3600  # seconds in a year
+unit_conv_dd = M_Hg / avo * kg_Mg * cm2_m2 * s_in_yr * area
 ```
 
 # The conversion formula is:
@@ -103,24 +106,19 @@ for (subdir in subdirs) {
 print(results_mass_Hg0)
 ```
 
-    ## # A tibble: 15 × 2
-    ##    case       total_Hg0_mass_tonnes
-    ##    <chr>                      <dbl>
-    ##  1 HIST_B10                   3637.
-    ##  2 HIST_B100                  3758.
-    ##  3 HIST_B150                  3798.
-    ##  4 HIST_B20                   3656.
-    ##  5 HIST_B200                  3828.
-    ##  6 HIST_B25                   2416.
-    ##  7 HIST_B27_5                 2416.
-    ##  8 HIST_B28_5                 2416.
-    ##  9 HIST_B30                   3673.
-    ## 10 HIST_B40                   3688.
-    ## 11 HIST_Bm25                  2416.
-    ## 12 HIST_V3                    3616.
-    ## 13 HIST_V3_3y                 3828.
-    ## 14 HIST_V3_4y                 3873.
-    ## 15 HIST_V4                    3616.
+    ## # A tibble: 10 × 2
+    ##    case          total_Hg0_mass_tonnes
+    ##    <chr>                         <dbl>
+    ##  1 HIST_B10                      3637.
+    ##  2 HIST_B100                     3758.
+    ##  3 HIST_B150                     3798.
+    ##  4 HIST_B20                      3656.
+    ##  5 HIST_B200                     3828.
+    ##  6 HIST_B30                      3673.
+    ##  7 HIST_B40                      3688.
+    ##  8 HIST_Feinberg                 4469.
+    ##  9 HIST_V3                       3616.
+    ## 10 HIST_V4                       3616.
 
 ``` r
 subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
@@ -166,24 +164,19 @@ for (subdir in subdirs) {
 print(results_mass_Hg_total)
 ```
 
-    ## # A tibble: 15 × 2
-    ##    case       total_Hg_mass_tonnes
-    ##    <chr>                     <dbl>
-    ##  1 HIST_B10                  3767.
-    ##  2 HIST_B100                 3882.
-    ##  3 HIST_B150                 3920.
-    ##  4 HIST_B20                  3785.
-    ##  5 HIST_B200                 3950.
-    ##  6 HIST_B25                  2695.
-    ##  7 HIST_B27_5                2695.
-    ##  8 HIST_B28_5                2695.
-    ##  9 HIST_B30                  3801.
-    ## 10 HIST_B40                  3815.
-    ## 11 HIST_Bm25                 2695.
-    ## 12 HIST_V3                   3747.
-    ## 13 HIST_V3_3y                4013.
-    ## 14 HIST_V3_4y                4093.
-    ## 15 HIST_V4                   3747.
+    ## # A tibble: 10 × 2
+    ##    case          total_Hg_mass_tonnes
+    ##    <chr>                        <dbl>
+    ##  1 HIST_B10                     3767.
+    ##  2 HIST_B100                    3882.
+    ##  3 HIST_B150                    3920.
+    ##  4 HIST_B20                     3785.
+    ##  5 HIST_B200                    3950.
+    ##  6 HIST_B30                     3801.
+    ##  7 HIST_B40                     3815.
+    ##  8 HIST_Feinberg                4627.
+    ##  9 HIST_V3                      3747.
+    ## 10 HIST_V4                      3747.
 
 ``` r
 state_files <- list.files(chem_hist_B100, pattern = "GEOSChem.StateMet.*\\.nc4$", full.names = TRUE)
@@ -387,19 +380,17 @@ for (subdir in subdirs) {
 print(results)
 ```
 
-    ## # A tibble: 10 × 9
-    ##    case       biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
-    ##    <chr>        <dbl>      <dbl>      <dbl>      <dbl> <dbl> <dbl>     <dbl>         <dbl>
-    ##  1 HIST_B10      275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  2 HIST_B100     275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  3 HIST_B150     275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  4 HIST_B20      275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  5 HIST_B200     275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  6 HIST_B30      275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  7 HIST_B40      275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  8 HIST_Bm25     275.       987.       89.2       310.  250.  838.     1825.          399.
-    ##  9 HIST_V3_3y    275.       987.       89.2       310.  250.  838.     1825.          399.
-    ## 10 HIST_V3_4y    275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## # A tibble: 8 × 9
+    ##   case          biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
+    ##   <chr>           <dbl>      <dbl>      <dbl>      <dbl> <dbl> <dbl>     <dbl>         <dbl>
+    ## 1 HIST_B10         275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 2 HIST_B100        275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 3 HIST_B150        275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 4 HIST_B20         275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 5 HIST_B200        275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 6 HIST_B30         275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 7 HIST_B40         275.       987.       89.2       310.  250.  838.     1825.          399.
+    ## 8 HIST_Feinberg    275.       987.       89.2       310.  250.  838.     1825.          399.
 
 ``` r
 results_mercuryemis <- tibble()
@@ -442,18 +433,16 @@ for (subdir in subdirs) {
 print(results_mercuryemis)
 ```
 
-    ## # A tibble: 9 × 3
-    ##   case       hg0land hg0soil
-    ##   <chr>        <dbl>   <dbl>
-    ## 1 HIST_B10      61.8    839.
-    ## 2 HIST_B100     52.5    839.
-    ## 3 HIST_B150     49.3    839.
-    ## 4 HIST_B20      60.4    839.
-    ## 5 HIST_B200     47.0    839.
-    ## 6 HIST_B30      59.1    839.
-    ## 7 HIST_B40      57.9    839.
-    ## 8 HIST_V3_3y    72.5    839.
-    ## 9 HIST_V3_4y    72.7    839.
+    ## # A tibble: 7 × 3
+    ##   case      hg0land hg0soil
+    ##   <chr>       <dbl>   <dbl>
+    ## 1 HIST_B10     61.8    839.
+    ## 2 HIST_B100    52.5    839.
+    ## 3 HIST_B150    49.3    839.
+    ## 4 HIST_B20     60.4    839.
+    ## 5 HIST_B200    47.0    839.
+    ## 6 HIST_B30     59.1    839.
+    ## 7 HIST_B40     57.9    839.
 
 ``` r
 subdirs <- list.dirs(chem_hist, full.names = TRUE, recursive = FALSE)
@@ -506,20 +495,18 @@ for (subdir in subdirs) {
 print(results_drydep)
 ```
 
-    ## # A tibble: 11 × 4
-    ##    case       drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
-    ##    <chr>                  <dbl>             <dbl>             <dbl>
-    ##  1 HIST_B10               2174.              801.              65.0
-    ##  2 HIST_B100              2242.              747.              67.8
-    ##  3 HIST_B150              2265.              728.              68.8
-    ##  4 HIST_B20               2184.              793.              65.4
-    ##  5 HIST_B200              2283.              712.              69.6
-    ##  6 HIST_B30               2194.              786.              65.7
-    ##  7 HIST_B40               2202.              779.              66.1
-    ##  8 HIST_Bm25              1576.             1112.              46.6
-    ##  9 HIST_V3                2162.              810.              64.5
-    ## 10 HIST_V3_3y             2225.              884.              66.1
-    ## 11 HIST_V3_4y             2230.              887.              66.3
+    ## # A tibble: 9 × 4
+    ##   case          drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
+    ##   <chr>                     <dbl>             <dbl>             <dbl>
+    ## 1 HIST_B10                   2.17             0.801           0.0649 
+    ## 2 HIST_B100                  2.24             0.747           0.0677 
+    ## 3 HIST_B150                  2.26             0.727           0.0688 
+    ## 4 HIST_B20                   2.18             0.793           0.0653 
+    ## 5 HIST_B200                  2.28             0.712           0.0696 
+    ## 6 HIST_B30                   2.19             0.785           0.0657 
+    ## 7 HIST_B40                   2.20             0.779           0.0661 
+    ## 8 HIST_Feinberg              2.36             0.709           0.00999
+    ## 9 HIST_V3                    2.16             0.810           0.0645
 
 ``` r
 # Sous-dossiers HIST_*
@@ -564,20 +551,18 @@ for (subdir in subdirs) {
 print(results_wetloss)
 ```
 
-    ## # A tibble: 11 × 2
-    ##    case       wetloss_Hg_total_tonnes
-    ##    <chr>                        <dbl>
-    ##  1 HIST_B10                     1818.
-    ##  2 HIST_B100                    1724.
-    ##  3 HIST_B150                    1694.
-    ##  4 HIST_B20                     1803.
-    ##  5 HIST_B200                    1672.
-    ##  6 HIST_B30                     1790.
-    ##  7 HIST_B40                     1778.
-    ##  8 HIST_Bm25                    2865.
-    ##  9 HIST_V3                      1835.
-    ## 10 HIST_V3_3y                   2021.
-    ## 11 HIST_V3_4y                   2029.
+    ## # A tibble: 9 × 2
+    ##   case          wetloss_Hg_total_tonnes
+    ##   <chr>                           <dbl>
+    ## 1 HIST_B10                        1818.
+    ## 2 HIST_B100                       1724.
+    ## 3 HIST_B150                       1694.
+    ## 4 HIST_B20                        1803.
+    ## 5 HIST_B200                       1672.
+    ## 6 HIST_B30                        1790.
+    ## 7 HIST_B40                        1778.
+    ## 8 HIST_Feinberg                   2234.
+    ## 9 HIST_V3                         1835.
 
 ``` r
 file_path <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B10/GEOSChem.WetLossTot_HgSum.2015_m.nc4"

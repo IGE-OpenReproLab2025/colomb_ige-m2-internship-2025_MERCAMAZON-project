@@ -602,7 +602,7 @@ padding-top: 0px;
 <body>
 
 <h1 id="mercury-mass-in-atmosphere">Mercury mass in atmosphere</h1>
-<p>Martin Colomb 2025-07-03</p>
+<p>Martin Colomb 2025-08-26</p>
 <h1 id="chargement-des-packages">Chargement des packages</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -616,16 +616,19 @@ padding-top: 0px;
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>chem_hist<span class="ot">&lt;-</span><span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>con_hg_B100<span class="ot">&lt;-</span><span class="fu">nc_open</span>(<span class="fu">file.path</span>(chem_hist_B100, <span class="st">&quot;GEOSChem.SpeciesConc.2015_m.nc4&quot;</span>))</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>statemet_B100<span class="ot">&lt;-</span><span class="fu">nc_open</span>(<span class="fu">file.path</span>(chem_hist_B100, <span class="st">&quot;GEOSChem.StateMet.2015_m.nc4&quot;</span>))</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>conc_hg0<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;SpeciesConcVV_Hg0&quot;</span>) <span class="co">#Concentration of species Hg0 (mol mol-1 dry)</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>Met_AD<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(statemet_B100, <span class="st">&quot;Met_AD&quot;</span>)  <span class="co">#Met_AD (Dry air mass kg)</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>area<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;AREA&quot;</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>M_Hg <span class="ot">&lt;-</span> <span class="fl">0.20059</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>M_air <span class="ot">&lt;-</span> <span class="fl">0.028964</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>kg_Mg  <span class="ot">&lt;-</span> <span class="fl">1e-3</span>     <span class="co"># conversion en tonnes</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>s_in_yr <span class="ot">&lt;-</span> <span class="dv">365</span> <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">3600</span>  <span class="co"># seconds in a year</span></span></code></pre></div>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>area<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;AREA&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>conc_hg0<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;SpeciesConcVV_Hg0&quot;</span>) <span class="co">#Concentration of species Hg0 (mol mol-1 dry)</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>Met_AD<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(statemet_B100, <span class="st">&quot;Met_AD&quot;</span>)  <span class="co">#Met_AD (Dry air mass kg)</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>area<span class="ot">&lt;-</span><span class="fu">ncvar_get</span>(con_hg_B100, <span class="st">&quot;AREA&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>M_Hg <span class="ot">&lt;-</span> <span class="fl">0.20059</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>M_air <span class="ot">&lt;-</span> <span class="fl">0.028964</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>kg_Mg  <span class="ot">&lt;-</span> <span class="fl">1e-3</span>     <span class="co"># conversion en tonnes</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>avo <span class="ot">=</span> <span class="fl">6.02e23</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>s_in_yr <span class="ot">&lt;-</span> <span class="dv">365</span> <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> <span class="dv">3600</span>  <span class="co"># seconds in a year</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>unit_conv_dd <span class="ot">=</span> M_Hg <span class="sc">/</span> avo <span class="sc">*</span> kg_Mg <span class="sc">*</span> cm2_m2 <span class="sc">*</span> s_in_yr <span class="sc">*</span> area</span></code></pre></div>
 <h1 id="the-conversion-formula-is">The conversion formula is:</h1>
 <pre><code>    mol species                g/mol species
     ----------- * kg dry air * -------------
@@ -683,24 +686,19 @@ la masse de mercure dans l’atmosphère sur l’année</h1>
 <span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a></span>
 <span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co"># Résultat final</span></span>
 <span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="fu">print</span>(results_mass_Hg0)</span></code></pre></div>
-<pre><code>## # A tibble: 15 × 2
-##    case       total_Hg0_mass_tonnes
-##    &lt;chr&gt;                      &lt;dbl&gt;
-##  1 HIST_B10                   3637.
-##  2 HIST_B100                  3758.
-##  3 HIST_B150                  3798.
-##  4 HIST_B20                   3656.
-##  5 HIST_B200                  3828.
-##  6 HIST_B25                   2416.
-##  7 HIST_B27_5                 2416.
-##  8 HIST_B28_5                 2416.
-##  9 HIST_B30                   3673.
-## 10 HIST_B40                   3688.
-## 11 HIST_Bm25                  2416.
-## 12 HIST_V3                    3616.
-## 13 HIST_V3_3y                 3828.
-## 14 HIST_V3_4y                 3873.
-## 15 HIST_V4                    3616.</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    case          total_Hg0_mass_tonnes
+##    &lt;chr&gt;                         &lt;dbl&gt;
+##  1 HIST_B10                      3637.
+##  2 HIST_B100                     3758.
+##  3 HIST_B150                     3798.
+##  4 HIST_B20                      3656.
+##  5 HIST_B200                     3828.
+##  6 HIST_B30                      3673.
+##  7 HIST_B40                      3688.
+##  8 HIST_Feinberg                 4469.
+##  9 HIST_V3                       3616.
+## 10 HIST_V4                       3616.</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_hist, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;HIST_&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
@@ -742,24 +740,19 @@ la masse de mercure dans l’atmosphère sur l’année</h1>
 <span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>}</span>
 <span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a></span>
 <span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="fu">print</span>(results_mass_Hg_total)</span></code></pre></div>
-<pre><code>## # A tibble: 15 × 2
-##    case       total_Hg_mass_tonnes
-##    &lt;chr&gt;                     &lt;dbl&gt;
-##  1 HIST_B10                  3767.
-##  2 HIST_B100                 3882.
-##  3 HIST_B150                 3920.
-##  4 HIST_B20                  3785.
-##  5 HIST_B200                 3950.
-##  6 HIST_B25                  2695.
-##  7 HIST_B27_5                2695.
-##  8 HIST_B28_5                2695.
-##  9 HIST_B30                  3801.
-## 10 HIST_B40                  3815.
-## 11 HIST_Bm25                 2695.
-## 12 HIST_V3                   3747.
-## 13 HIST_V3_3y                4013.
-## 14 HIST_V3_4y                4093.
-## 15 HIST_V4                   3747.</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    case          total_Hg_mass_tonnes
+##    &lt;chr&gt;                        &lt;dbl&gt;
+##  1 HIST_B10                     3767.
+##  2 HIST_B100                    3882.
+##  3 HIST_B150                    3920.
+##  4 HIST_B20                     3785.
+##  5 HIST_B200                    3950.
+##  6 HIST_B30                     3801.
+##  7 HIST_B40                     3815.
+##  8 HIST_Feinberg                4627.
+##  9 HIST_V3                      3747.
+## 10 HIST_V4                      3747.</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>state_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(chem_hist_B100, <span class="at">pattern =</span> <span class="st">&quot;GEOSChem.StateMet.*</span><span class="sc">\\</span><span class="st">.nc4$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>chem_files  <span class="ot">&lt;-</span> <span class="fu">list.files</span>(chem_hist_B100, <span class="at">pattern =</span> <span class="st">&quot;GEOSChem.SpeciesConc.*</span><span class="sc">\\</span><span class="st">.nc4$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
@@ -828,7 +821,7 @@ TOTALE DE Hg⁰ (tonnes) PAR MOIS</h1>
 <span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="dv">1</span>),</span>
 <span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>    <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>)</span>
 <span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAHgCAMAAABNUi8GAAABfVBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZmYAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kJA6kLY6kNtNTU1NTW5NTY5Nbm5Nbo5NbqtNjshmAABmADpmAGZmOgBmOjpmZgBmZjpmZmZmZpBmkGZmkJBmkLZmkNtmtttmtv9uTU1uTW5uTY5ubm5ubqtujshuq6tuq+SOTU2OTW6OTY6Obo6Ojo6OjsiOyP+QOgCQZjqQZmaQZraQkGaQkLaQtpCQtraQttuQ29uQ2/+rbk2rbm6rjm6ryOSryP+r5Mir5P+2ZgC2Zjq2Zma2ZpC2kDq2kGa2tpC2tra2ttu227a229u22/+2/7a2/9u2///Ijk3IyMjIyOTI5KvI5P/I///bkDrbkGbbtmbbtpDbtrbbttvb25Db27bb29vb2//b/9vb///kq27kyI7k5Kvk5OTk////AAD/tmb/yI7/25D/27b/29v/5Kv/5Mj/5OT//7b//8j//9v//+T///8Hk3kTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAfw0lEQVR4nO2di3/U2HXHNcaU6fJM8NJit6bAhsVs+sBJWwxNuhT62qHdhQR2cZPgxaR4wWm8fuDEHs/f3nuvpJkrjc6VjkZ35kj6fT+7nmF85s7R1dfSfUkTDAAQTDDrBABwAUGBaCAoEA0EBaKBoEA0EBSIpnJBd4POo6rLBO2lckF7wUrVRYIWU7Wg+93LFZcIWg3aoEA0FQq63w2G0IfRo6W5l4kXNm+pHxuOd1SOTmEsjQTZ6bjfUw1ERex3z8RPe+k2/v5yEFx6X6iYTMxmbYy1zMx+KUV/zU7xaGmiRt/MBd0NdNVDUOcnuwRVv3r/Ov2uyQUN90spkoKqBE+/J2NzqVTQIolkCzpVmiWoVqu/lsqMLeig503Qwe4k4zoQNIs6Car/Pbmg+3+akqhCQSfCm6BxFYUbenBNnffPvxiE1RFtgX5DTzcIzsTRozAV8i9PgmD+4bDAXrCiWludTwf9L7vBfFgDm6r5dep2Ovz12SDo6FaZ9Tl2sCXo8LWY/hNdeJRO6rfhe/pf6eIvjjY1IzE7ZphN4invk8cF7eutNdEpQe1iRmlk14+1WU8+TeYd7ZesSh/tJLsoFfm6G3RuRdX+7fg+GvTmvlkL5l5kbLsDb4LG/zLjohujpqlLUCusvxY+Hf0t9oIb5pXbveHrUfyZZHj0qvr4hKCj4JGgo9cionLO2ekMf2veE3/S6JA1npgdM8rGfsr85DFBj5bNZ11X0eEpPq56uxgrjez6sTbLfrN+w1BQqtLtPE+/H9VCWO3XM/aREvSvzO/Hts6FN0EjOcLzR1d3M9UfvXopJajdSbLDVF11bg8O1kaboaroh2bjOg/16yZ+/vlAP1+xw4+WVED86uhzrOChoNZrERvB/Av9Qqr4kKg3cVodAw6srul4YlaMlY31lPvJY4Ja0clOkl2MlUZ2/VibFb15tG3hfsmqdHtfjopSkWfeDza7Kmb4YalN6QXR7khvnQs/vfjweKErbVf/7EX1t2HqhxTUDuuvRW+3BNVPo0EL83rUGjtaOv3eCrdaivbnWMFDQa3XwjeoGjfnT1Naxm+HqduNvLHE7BgrG7sJy/zkxAhJaEb416+j9Zn1h4PxYuw0susnlVdi22JBxyo9tS9HtWCS3Q0SOyOxKWFhGVvnwp+gRguzzcNGc2xGtqCJsH74B2YdlcOaiepEH1HiE5I+JVnh+u/3Yth0tT7HDh6lMXot3oTw46J9mvptvD8+vPnqWmALmkrMjklkYz9lfXJa0PhTeqMsxotJpZFRP8nNSrxhKOhYpSd30rCoaIpbt4aTHzbalLCwjK1z4bEX3zM1qV4b1oBb0ERYsn9jijNbbdWV+ru2BLVP5vq1888TgtrBcRr2a+FnxAfsXZNOtqDfRq5YgqYSS8SMsrGecj85fYqPo8c663YxdhrZ9WNvlsHKOxZ0rNKtnWQXFR0X9QcR1T4sTIqgu6YFf3ngT9DRFibCTV80tVvs4JGg6SpKapL+bdQGDU5duPV8wyVoImaYjfWU+8nlBLXSyK4fa7Oi4kZ5FxLUKooS1NqURGFF8SioamS8Wws7tdFpYZhyuDW6vZJ1ig/PDQUEHXXx0+H9zWtB4nPs4JGgY7OG1hly/Lf2e1yCjsVE2Yyecj85LWj8zzFBs4oZEzSZke1cRhs0tW2JnZSo6vAUnzq4JDYlLow1SupzoL7X+efwpbGGdZjqRlLQVCcpV9C40Z3tc/pzrOBRJ2n0WvimqJioq5L+rX5P9K+oH5CdWEZMuq/E/OS0oIlOko1djJ0GUT/JZ4m8CUETOylji8JOktU3tTYlcnh861z4FHQ3Po8MhyaiMZ5wPEP1Pk2LaNjlt8OKCLprxkAOlpM7YL87p5ufX4YjbsPPsYKHglqvRWzo8ZR+L2qFpX4btVtvD/SL9vDCeON4GGNlYyfG/GTXMFMSqxg7DaJ+hpsVPbG2Laz58Uq3d5JdVDggtdlN7Tt7UyJBx7fOhafFImbj1QZHR/ONYNj4thrXF+Ime+ZAfb6gxJB8L3xVv2B9jhU8NlA/+sMKu5hmAJwY0e7Fm0gLmoixsrGeMj95TNBhVzi9k+1irDSI+hltVrQlo7zD/UJXuvnkxMadM88vpfadtSnxWvaxrXPhU9Dw3GpITnUO9BKxzu1wC77VB7isqc58Qc2c2XB2bRiu59+Ci2YuzvqcUXBqqtO8FtP/KjXhaP02nElSAcGpW//bHZ6zxxNLxFjZWE95nzwmqDmEdS59OT7YbRVjpUHVz3Czhu8d5m32S1alp6c6w6LCqc543jk1wxxuyvBii7Ftd4AFy3VmbG3o7PB1qQ8ErSPhHKNqXftfXlUUCAos4safnAsUISiwCAfIz7/Ij5wWEBS0EggKRANBgWggKBANBAWigaBANBAUiAaCAtFUJ2gAQGX4ELSykkDbgaBANFxBDz/7Qv1cX1i4upPxyCkJgAIwBT15/LESdPvqzsnjxfFHTkkAFIEp6PafqSPo8eq9wWDvyqv0I6skAIrAE/Twx79WgprTvLIy/cgpCYBCsAQ9eWxkNAdLJWT6MSwvMTIACvH997POQCwsQbcXB5agd9OPjJJAAghKwhH08MevBnlH0GIlgSQQlIQj6PaCYaztiTbopEBQkjLjoOjFVw0EJSk1UL8ejXumH1klgREQlKT0TJLxMf3IKQmMaLugjoEfzMVLoOWCuoYmISiYNelldalfjp5W94mVlQSkUM30S2YpEBQUhzCFVIj1cnYpEBQUhlCFdIj1MlUK2qBgHJaIzNd5L6MXD8apRMSqBHXmOXrKeqOz0MpKAp4ocYxjHHHLnMvJREdPee90FVpZScATbIV4nSeqGLafEFQE0x+oL9McpApivMwHgkpgBjNJJc62MwGCSsCnoJSH9fATgorAo6B1OVJSQFAJ+BO0zMiOKCCoBCAoCQSVAAQlgaASQBuUBII2nXr7CUGbQ81NJICgTaHu53ICCNoQat8bIoCgDQGCcgqtrCRQFAjKKbSykkBhmuknBG0OjfQTgoqAN1DfTBMJIKgEWII29FxOAEElwBG0qb0hAggqAQhKAkElAEFJIKgE0AYlgaASQC+epCmC9r86GwSdiy9SL+8GK9PPhQ8laKtUzKYhgh4thS2zzqPk6xvpF2pFu07m2TRE0I3g0neDwYcnwen3U/9sb7SsO5RNMwTtr829NE96tT5ipoCgg6YIOhSzv6XanZ1Hr7vBvG6O7ncvm3bo67NB59OBbgmc0UFr6jhrRUkFgg4aI+h+Nxh2kHqd63q/6mOq6SNtBGfNjl6J+0xGUytKLPDTLWj/zYMbN27+gt+qm0GlHiwHwfxD/ay/po+L/V5wOeoj9YLOba3pStxn0praUXKBnw5BX5+NTjHRjucUOnlefA7uq0xf6uOjOSrud8+ETdOjpdBK46r5ldbUigKSoQTdXA7mf/5c94zffnWWq+iM/uz7phNv2p3hedycyyMHN4yrwyaoFSUAHClJsgXtP+ncss7sH550L3FO9NOu7eFop36yG/5jV5284z7SIGGlMdaKmj3B99/DUIJsQY/+6btkWP+/OZ2JaVf2UDMtaNih769pV0ftzqOluEk6MO1OK2rmBEZQGJpJI3rxqpmpD/j9L9UpXvV+Tr8YHKwFZ0ILzaEzOo7qJqhqqppXR1EzB4I6aISgSr/hTOfR0p+YaU+lpXEzamWag+eGiTlrWqPDqNkDQR3kCbp5bWwBRoFCy+dTkoP73SA4pQ+j+92Vg+XAHFGjPpI+/YfH0b7q6F98t3YmESUAtEFpHILqQZrdjAUYBQqdNKsJKLY8RNgiEiXorFOQikPQXnD63VpweZffTptlbfcKzQ0Vi5oaLf86bhe0oLqHu9/tPIqGtFmFTp5XWaI+USVR0wOCktCCajF3g7mX9RK02Mi7kPF5kI9b0A11et/vso82aFCBqnC2Qc93gxX1UKs2KGgWzl58EFxSB9J5dn8CglJguJOLcxz0w/twCTC70EkyajJY4MmmGTNJNQFL5Pm4BX3zs5vvflui0AkSajIQlI9L0NfdIJj7eok/ZIhdkA0E5eMQdDeY/+XS3MsSV0VgFxBQfmKgnsQ9k6THQjEOWiHE8ROCkrgH6uP/uYVOnle7gKAkEFQCEJTEOZO0Es7HYyaJD68vBEFJHILudzsXup1PuvVaDyoDZm8dgpK4hpn2l81V8fylva0XlDueBEFJ3AP1/bfPvxt/Nb/Q8vk0AwhaGZjq9AFG5CvDvVhky8A+iGLPwM+qcAh6tBwdCDDMxAd+VoRzmKlz65mGfX877BtQFa6B+tKX5rZIUBwpPeOeSSpbaPl8agbamr5xLxYpW2j5fOoFeuvecc4knS55B/fW7DEI6h3XKT5ALz6HqgTFQD2J4xT/4EbETfTiKSo6gEJQEswkTUY1J3gISgJBJQBBSTDVKQEISoKpTglAUBLWVOfJ44WFu/rJ+sLC1Z2MR6IkkAMEJWFNda4vDo5XlaHbV3dOHi+OPxIlNQKvw50QlIQz1Xn42RdGxuPVe4PB3pVX6UeqpCaAAfkZwZ7qVIIaUZWV6UeqpAaAKaNZwZ3q1B6ag6V6kn4My2vkjoSgs4I31al6SaozFAl5N/1IldQAIOisYE91KhtdR9CskpoA/JwR7JmkjLZnC9qgWJk8KziCxkfKNvbiwYxwCrp5/dy5C6Ovij95rEVUjdD1aNwz/UiXBEA5cr5EodO1v3BVzyTFM0fGx/QjURLIAQP1JA5BN4L5F4PBwTJuYOsdCEqSP1CPG9j6B4KS5E914v6g/oGgJPmLRfa7ENQ3EJTEudzOND432nUD25mMd0JQEudcfHD+86fXglbdwHY2M0YQlMQ1DnoQ3sCWf3F8fQWd0Zw7BCXJuYHt1hb7W7yyS6oJWBQiDUcn6dp50znqr7WokwRBpUEJurX1dmnuub6mc7NVvXj4KQxC0NFi0MCe6yxaaCWpzQb4KQvqCHrw7Gm383m5+9fWWlAgC9eCZfY9mYiSAChNtqBHP0+7+YYjKwQFVZEtaH9t/qEdtbnMaodCUFAV1Cn+227nR8/Ns/7b+93OLdbZHoIywUA9CdkG7T/pqg7tqbPqR+cSszEKQZlAUBLXTNKbB9fOnTt/8zm/0Mlyah8QlAT3B5UABCWBoBKAoCQQVAIQlASCSgCCkkBQCUBQEggKREMI2r8fBAF3+DOzJKlg1VI9IATtBRduXOdfLZdRklCw7rMmEItF/kJfKLf/UcmvO5a/57Fyvi4Qgv7ly+HPMoVOltMUgKB1gTrFd27cuNFt7ikegtYFVyfpYoM7SfCzJrR2mAl+1gOHoNE3dSrYhU6aVdvAQD1JkW/5CILObV6hVWTWJiAoieOiuW/jezN9cr0brLAKrSS1FgFBSYrd3W6Xd208BGUCQUmK3cCWeRNbCMoEgpJAUAlAUBLXPerDhqc+vTPvUw9BmUBQEkcbdDcILj57dl91kJSrrG/6gKBMICiJa6B+86y5ge1DdZbn3T8MgoKqcM8kfXj27LsyhZbPB4AErZ3qBPWAEHQ0zalgH0QhKKgKYj2off/aoE13WAbCIO5u9+CG4nq3c0E/su8TCkFBVbjaoCW+BJEoCYCSQFAgGggqAQzUkzRf0DosnYegJI0XtBYXH0FQkqYLWo/LNyEoiWugPv6uuToP1EPQmtP0gXoIWnOIgfo3zyzYXzUnyYc6+AlBaZq/WKQGfkJQmuYLCmoNBAWigaBANBAUiAaCAtFAUCAat6Bvfnbz3W9LFDpBQgDYuAR93Q2Cua+ZlxxnlgRASZw3bpj/5dLcyx7vpg1ZJYEcMFBP4rr1TeeRXs/EvO1NRkkgDwhK4r55WIkbh2WUBPKAoCQQVAIQlMR5A9sVLecu/wvnICgTCEriEHS/27nQ7XzS7TxiFzppVm0DgpK4hpn2l83d7dh+QlAuEJTEPVDff/scd7ebAhCUBFOdQDS4ux0QTdMvmgM1x3XR3P3g4ufP7ndu1fqiOVBvnHPx0Rd5sb5lLqskAMpS7HuSuIVOmlUp6nD5JuDSHEFrcQE84JL/RV4bo+/pPF5dWLjySj1ZX1i4upPxmF3SVKjHLUQAl7wv8np6PxhOdR6vLioXlYnbV3dOHqvn6UeqpGlQa0ExUE/Cmerc+/iLweDwsy+OV++pf1x5lX6kS5oCELSZ5HyR19vn6SEmJaj6Tx9O76UfXSX5p8Z+QlAa9lSnOsWbg6USMv0YljczT+rrJwSl4Qq6rU7zkZB304+8ksAICErCFHR7IW5uEkfQwiUBCwhKwhN0XXeTBjLboHUGgpKwBN0Oe+oie/G1BoKScAQ1R0rNejTumX4sXBIABeHc+mZ7wXDPzBwZH9OPdEkAlAK3vgGiwa1vgGhw6xsgGtxZBIgGggLR4NY3QDS49Y0EMFBPglvfSACCkuDWNxKAoCS49Y0EICgJ7iwiAQhKQtxZ5MENi5sYqPcMBCXBKV4CEJQEgkoAgpI4Bd3StxB79vQm2qBgVjgH6tFJArPGOdV5vtu5cC3ATBKYHa7FIp1HPSXnBtaDgtnhXs2k7w0qbz1oje/QALi4BdX3sBW33K7O97gBXFxt0M6j/e4ZdQSVJWit7xIGuDivSZr7Zi34wZqw9aAQtFU4r+r86KVecTfPPYBCUC4YqCfJnUn6UGK9HdqgTCAoiaOTdO28OXT212S1QZvYi4egJJSgW1tvl+ae6++Z2xTWSWoiEJSEEDSxIFTaOGjzgKAk1BH04NnTbudzs1iE/UVzEJQLBCVx3FnkAXuhMlESyAOCkmA9qAQgKIlT0M3r585deFii0EkyAsDCIWh/LQg63RJ9JAgKKsMh6EYw/0L1lpax3A7MDvftF/WjvOV2oEU059uOQSNxr6jXj9KW24FW4bwmyTQ+N4QttwOtwn1V5/nPn+KiOTBLXOOgB+HtF1/wC50sp/aBgXqSnNsvbm2Vme6EoEwgKEkd14M2DwhKgvWgEoCgJFgPKgEISoL1oBKAoCRYDyoBCEqC9aASgKAkEBSIBoIC0UBQIBoICkQDQYFo3IK++dnNd78tUegECQFg47y7XTcI5r5ewkVzYHY47w86/8uluZe9mV0017ybhAE27ovm9PVIM7toroG3WaTAQD2J+6K5+H9uoZPn1cwb1VJAUBIIKgEISuK8aG4l/KaP2Vw0B0HBIOeiuc6FbueT7qwummuPnxCUxjXMtB9eNMf2E714LhCUJOeiubfPS3yHAsZBuUBQEkx1SgCCkuQJunntIq6LB7PDeX9Q3YUPcGcRMEOcw0yn360Fl2c1zATAIG+qc78bTndyC508LwAMeV/HPbuZJAAGeYLqWy/iDstghjjboOe7wYp6QBsUzIycb/m4pA6kwr6OG7QK5zjoh/f6DowlCp0kozaCgXoSzCRJAIKSYCZJAhCUBDNJEoCgJJhJkgAEJcFMkgQgKAlmkiQAQUkwkyQBCErCnEk6/skX+mF9YeHqTsYjURIAZWHOJK1/rAXdvrpz8nhx/JEqCYCysGaSjlcXtKDHq/cGg70rr9KPjpIAKAdrJmlv8fAzJaj5oaxMPzJKAqAYTkG3zNfQPL05OscbF83BUgmZfgzLa8/V7GAKuL/tOGQuW9C76UeyJADKktOL71xIfh137hE0syQAyuIaB+086ik5N+z7g6INCqZL3kD9SnKgfuQievEVgoF6krypzsuDxFSnEXSwHo17ph+JkkAeEJTE1QbVi0X0VOeYoHrmaDHrkSgJ5ABBSZz3qJ/7Zi34wRqW23kHgpI4v+Xjo5f6Doy4aM47EJQkdybpQ4n7L0JQJhCURMZFc22ffIKgJISgH7Ys2MdQrm2tnx6FoCTZguqVdiN8r6hv09clACbEEXQj6NwYctPzinoICkgIQQ/ud4PzD0sXys0BggICupP09lqgHGV/kWxGSQWSgJ8gG1cvvr+pR0FLOIpePKiKnGGm/ldngwBXdYKZkTcO+kEZiuviwcxwCmqOn50fse8eBkFBVThufaPtPHWrTC8JgjLBQD0JIajpH5Xsw0NQNhCUhByon/98elOdrQeCkkiY6gQQlIQQ9L9u3JjeVCeAoCQyltu1HQhKAkElAEFJIKgEICgJBAWigaBANBAUiAaCAtFAUCAaCApEA0GBaCAoEA0ElQAG6kkgqAQgKAkElQAEJYGgEoCgJBBUAhCUBIJKAIKSQFAJQFASCCoBCEoCQYFoICgQDQQFooGgQDQQFIgGggLRQFAgGggKRANBJYCBehIIKgEISgJBJQBBSSCoBCAoCQSVAAQlmbKg+MauTCAoyXQFxXceZgNBSaYqKL41lgCCkkBQIBoICkSDNigQDXrxQDQYBwWigaBANBAUiAaCAtFAUAlgoJ4EgkoAgpJAUAlAUBIIKgEISgJBJQBBSSCoBCAoCQSVAAQl8SMoAJUBQYFoPAjqctdbMDecu7mCkvG6oX7rZZJkIGiV8XKUg6ClP7HSYAhaSTQE9RUMQSuJbrugAJQFggLRQFAgGggKRANBgWggKBBN7QU9/skXrPDVRV+ZyIJXL3KrZQqC7rG2/fDOwtWd4uHHq3/+74zSj1cXGNmo6IV7xcN5GyqpXnjV4rdeUtFTEPR3dxgJ7i3cPbxTfE8cr3L2mg7/XfE37Km9sM7Yc6wNlVQvvGrxXC+p6CkIqv72Cyd48viuesOPXxUM5/u5c/hZ0VOfyUXtjcIfwdlQZrjXeuFVi+96SUVP4xR/9f8K/wkdr6pTx+FfF92iPRWnzzfFKsvsNvMJxXNRu6Nw7XI2lBnus16Y1eK7XlLRUxB0fVH9VRRM8OSxClxfuFf0DHJ45966qt5i5f/xf3bCdBi5DI5/+us7BfcdZ0OZ4T7rhVktvuslFT2NU/x/DIon+Mff7xz+jaqwvY+LnXK2F67o817RcFbo9oI6l21f3VkveDJjbai0emHUoN96SUV7FVQ1J668ip/mJWgFDwb5p5wo/OSxqaWi4YP4AFAomW11klT7Lb/tZ/U8i+wJOfXCrBa/9ZJZLT4FVT3P0fhFXoKJYBWe02gfhv/hVzuc8EGhY0UymfwdYfc88/eEnHphVovfesmuFo+Cxr29+CP/3lUBdvDJr3L/nicIjw8uhTMvcGxJ9DzdGyqpXpjV4rdeiGrxKqg5vewVatfbwevqDJLzngnCC/wtW+Gqigt0hVn9VDn1wqwWv/VCVIvPU3zUiN4rNOvAChYWzu2niqkX9nb6rJfswn0Kenjnrv3JFQYLC+f2U8XUC3s7fdZLduFee/Hb4R9DsVkKVrCwcENxQ+XUC3c7vdZLZuF+x0HX9YhZ0c1hBQsLNzDOZmLqhbudXuslq3C/gv7h31RLutgIGzNYWvhv9M+8/vtwDVyh0lnB3HBm4aWT+Y3+mVsvEVmFexE0bk0c3rny6zt5XUlWsNzwIus44jVwhUpnBXPDmYVPkEx+vewtRIv3Mgv3IujxanisLrQ+jBVc6/B4jVGhcFYwN5xZuNdkDu/cG/z+92S0F0FPHv+D2nEF13yxguscHocVCmcFc8OZhftNZv1u8l0p/LRB1+/uLdz1ElzjcNYaON5CQmY4s3CvyZgJJMecgh9BtxdVln9X8DoXVnCdw1lrA1nB3HBm4V6TUZHbqqVKTaz5EVSvDCs2lccNrnU4aw0cc8EcL5y7Gs9jMtrme3RwtYLGy6uOf/pKH+PdJz9WcCPCi62BYwVzw5mFTyOZ7QWjJhFcraDx8qqTf/3PVX3yc+44VnAzwgutgWMFc8OZhU8lmfAyAeI66WoFHS6vKnJpAiu4IeFFlsyxgrnhzMKnk8y6Y/C/4lN8vLzq8G8rDm5IeJElc6xgbjiz8CklszetXjxveZW/a8xqHe41FWbhs0+m4lM8a3mVx2vM6hzuNRVm4bNPpipBy14HVvk1ZnUO95oKs3ApyVQkaPnrwCq+xqzO4V5TYRYuJplqBC19HVhucIvCvabCLFxOMlUJWvI6MIRPKRVm4XKSqegUL+c6sBqH1/n6OG/JVCSonOvAahxe5+vjvCVTgaD6Eum7Ra+mYgW3KNxrKszCRSUzuaD6OL2t77tW5GoqVnCLwr2mwixcVjITCxr2yNYX1afmX03FCm5RuNdUmIXLSmZyQcNVUttmfWqBa7UYwS0K95oKs3BZyVRxBF2MPrHq4BaFe02FWbisZKpog/7jq+KfyApuUbjXVJiFy0qmomEm/YmFLx9jBbco3GsqzMLFJFPVQH2BZeXlglsU7jUVZuFikqlMUFZ6zKpqSbjXVJiFi0mmKkHzLxwrGdyicK+pMAsXk0x1y+08Bbco3GsqzMLFJFORoCe/8hXconCvqTALF5NM7b/tGDQbCApEA0GBaCAoEA0EBaKBoEA0ENQnu4Hh1KXvUr/4MJN06ggE9UkkaBB0HiVe//ajlzPKqHZAUJ/sBiv64cOTYC5hZG8OghYEgvokElQZGVy2X4eghYGgPhkKerR0Rv18fVad7G+976+pk77698F988+ZZigeCOqToaD9tdPvBxthe/RyJOh+1/zzzGxTlA4E9clQUH1SP1qaezEY7C8pVc0pvhf88P2g/2QYArKAoD5JCKp+bj17cDaIBN3vmmNnfw2HUBcQ1CfJU3x0Th8KGg1BnUYr1AEE9clQUH24PFoKLtz6xdultKDo0buAoD6xhplWon8cjQS97HwvMEBQn4wG6pWVu8GZ94ODZXOK7zxSZ/3Op+rk/rqLNqgLCOqTxFSnOsXHp/QNa5gpNQsKkkBQn8SLRcLReHX0DE7d1kfPI3Mc1QP1wcUXs05SNhAUiAaCAtFAUCAaCApEA0GBaCAoEA0EBaKBoEA0EBSIBoIC0UBQIBoICkQDQYFo/h/NmqfIynWhRwAAAABJRU5ErkJggg==" /><!-- --></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">print</span>(df_mass)</span></code></pre></div>
 <pre><code>## # A tibble: 24 × 2
 ##    date       mass_tonnes
@@ -932,19 +925,17 @@ TOTALE DE Hg⁰ (tonnes) PAR MOIS</h1>
 <span id="cb22-59"><a href="#cb22-59" tabindex="-1"></a>}</span>
 <span id="cb22-60"><a href="#cb22-60" tabindex="-1"></a></span>
 <span id="cb22-61"><a href="#cb22-61" tabindex="-1"></a><span class="fu">print</span>(results)</span></code></pre></div>
-<pre><code>## # A tibble: 10 × 9
-##    case       biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
-##    &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
-##  1 HIST_B10      275.       987.       89.2       310.  250.  838.     1825.          399.
-##  2 HIST_B100     275.       987.       89.2       310.  250.  838.     1825.          399.
-##  3 HIST_B150     275.       987.       89.2       310.  250.  838.     1825.          399.
-##  4 HIST_B20      275.       987.       89.2       310.  250.  838.     1825.          399.
-##  5 HIST_B200     275.       987.       89.2       310.  250.  838.     1825.          399.
-##  6 HIST_B30      275.       987.       89.2       310.  250.  838.     1825.          399.
-##  7 HIST_B40      275.       987.       89.2       310.  250.  838.     1825.          399.
-##  8 HIST_Bm25     275.       987.       89.2       310.  250.  838.     1825.          399.
-##  9 HIST_V3_3y    275.       987.       89.2       310.  250.  838.     1825.          399.
-## 10 HIST_V3_4y    275.       987.       89.2       310.  250.  838.     1825.          399.</code></pre>
+<pre><code>## # A tibble: 8 × 9
+##   case          biomass hg0_anthro hg2_anthro hgp_anthro   geo  asgm total_hg0 total_hg2_hgp
+##   &lt;chr&gt;           &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 HIST_B10         275.       987.       89.2       310.  250.  838.     1825.          399.
+## 2 HIST_B100        275.       987.       89.2       310.  250.  838.     1825.          399.
+## 3 HIST_B150        275.       987.       89.2       310.  250.  838.     1825.          399.
+## 4 HIST_B20         275.       987.       89.2       310.  250.  838.     1825.          399.
+## 5 HIST_B200        275.       987.       89.2       310.  250.  838.     1825.          399.
+## 6 HIST_B30         275.       987.       89.2       310.  250.  838.     1825.          399.
+## 7 HIST_B40         275.       987.       89.2       310.  250.  838.     1825.          399.
+## 8 HIST_Feinberg    275.       987.       89.2       310.  250.  838.     1825.          399.</code></pre>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>results_mercuryemis <span class="ot">&lt;-</span> <span class="fu">tibble</span>()</span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="cf">for</span> (subdir <span class="cf">in</span> subdirs) {</span>
@@ -983,18 +974,16 @@ TOTALE DE Hg⁰ (tonnes) PAR MOIS</h1>
 <span id="cb24-36"><a href="#cb24-36" tabindex="-1"></a>}</span>
 <span id="cb24-37"><a href="#cb24-37" tabindex="-1"></a></span>
 <span id="cb24-38"><a href="#cb24-38" tabindex="-1"></a><span class="fu">print</span>(results_mercuryemis)</span></code></pre></div>
-<pre><code>## # A tibble: 9 × 3
-##   case       hg0land hg0soil
-##   &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;
-## 1 HIST_B10      61.8    839.
-## 2 HIST_B100     52.5    839.
-## 3 HIST_B150     49.3    839.
-## 4 HIST_B20      60.4    839.
-## 5 HIST_B200     47.0    839.
-## 6 HIST_B30      59.1    839.
-## 7 HIST_B40      57.9    839.
-## 8 HIST_V3_3y    72.5    839.
-## 9 HIST_V3_4y    72.7    839.</code></pre>
+<pre><code>## # A tibble: 7 × 3
+##   case      hg0land hg0soil
+##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;
+## 1 HIST_B10     61.8    839.
+## 2 HIST_B100    52.5    839.
+## 3 HIST_B150    49.3    839.
+## 4 HIST_B20     60.4    839.
+## 5 HIST_B200    47.0    839.
+## 6 HIST_B30     59.1    839.
+## 7 HIST_B40     57.9    839.</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_hist, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;HIST_&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a></span>
@@ -1043,20 +1032,18 @@ TOTALE DE Hg⁰ (tonnes) PAR MOIS</h1>
 <span id="cb26-46"><a href="#cb26-46" tabindex="-1"></a></span>
 <span id="cb26-47"><a href="#cb26-47" tabindex="-1"></a><span class="co"># Afficher les résultats</span></span>
 <span id="cb26-48"><a href="#cb26-48" tabindex="-1"></a><span class="fu">print</span>(results_drydep)</span></code></pre></div>
-<pre><code>## # A tibble: 11 × 4
-##    case       drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
-##    &lt;chr&gt;                  &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;
-##  1 HIST_B10               2174.              801.              65.0
-##  2 HIST_B100              2242.              747.              67.8
-##  3 HIST_B150              2265.              728.              68.8
-##  4 HIST_B20               2184.              793.              65.4
-##  5 HIST_B200              2283.              712.              69.6
-##  6 HIST_B30               2194.              786.              65.7
-##  7 HIST_B40               2202.              779.              66.1
-##  8 HIST_Bm25              1576.             1112.              46.6
-##  9 HIST_V3                2162.              810.              64.5
-## 10 HIST_V3_3y             2225.              884.              66.1
-## 11 HIST_V3_4y             2230.              887.              66.3</code></pre>
+<pre><code>## # A tibble: 9 × 4
+##   case          drydep_Hg0_tonnes drydep_Hg2_tonnes drydep_HgP_tonnes
+##   &lt;chr&gt;                     &lt;dbl&gt;             &lt;dbl&gt;             &lt;dbl&gt;
+## 1 HIST_B10                   2.17             0.801           0.0649 
+## 2 HIST_B100                  2.24             0.747           0.0677 
+## 3 HIST_B150                  2.26             0.727           0.0688 
+## 4 HIST_B20                   2.18             0.793           0.0653 
+## 5 HIST_B200                  2.28             0.712           0.0696 
+## 6 HIST_B30                   2.19             0.785           0.0657 
+## 7 HIST_B40                   2.20             0.779           0.0661 
+## 8 HIST_Feinberg              2.36             0.709           0.00999
+## 9 HIST_V3                    2.16             0.810           0.0645</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># Sous-dossiers HIST_*</span></span>
 <span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> <span class="fu">list.dirs</span>(chem_hist, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>subdirs <span class="ot">&lt;-</span> subdirs[<span class="fu">grepl</span>(<span class="st">&quot;HIST_&quot;</span>, <span class="fu">basename</span>(subdirs))]</span>
@@ -1097,20 +1084,18 @@ TOTALE DE Hg⁰ (tonnes) PAR MOIS</h1>
 <span id="cb28-38"><a href="#cb28-38" tabindex="-1"></a></span>
 <span id="cb28-39"><a href="#cb28-39" tabindex="-1"></a><span class="co"># Afficher les résultats</span></span>
 <span id="cb28-40"><a href="#cb28-40" tabindex="-1"></a><span class="fu">print</span>(results_wetloss)</span></code></pre></div>
-<pre><code>## # A tibble: 11 × 2
-##    case       wetloss_Hg_total_tonnes
-##    &lt;chr&gt;                        &lt;dbl&gt;
-##  1 HIST_B10                     1818.
-##  2 HIST_B100                    1724.
-##  3 HIST_B150                    1694.
-##  4 HIST_B20                     1803.
-##  5 HIST_B200                    1672.
-##  6 HIST_B30                     1790.
-##  7 HIST_B40                     1778.
-##  8 HIST_Bm25                    2865.
-##  9 HIST_V3                      1835.
-## 10 HIST_V3_3y                   2021.
-## 11 HIST_V3_4y                   2029.</code></pre>
+<pre><code>## # A tibble: 9 × 2
+##   case          wetloss_Hg_total_tonnes
+##   &lt;chr&gt;                           &lt;dbl&gt;
+## 1 HIST_B10                        1818.
+## 2 HIST_B100                       1724.
+## 3 HIST_B150                       1694.
+## 4 HIST_B20                        1803.
+## 5 HIST_B200                       1672.
+## 6 HIST_B30                        1790.
+## 7 HIST_B40                        1778.
+## 8 HIST_Feinberg                   2234.
+## 9 HIST_V3                         1835.</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="st">&quot;C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B10/GEOSChem.WetLossTot_HgSum.2015_m.nc4&quot;</span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>wetloss_nc <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(file_path)</span>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a></span>

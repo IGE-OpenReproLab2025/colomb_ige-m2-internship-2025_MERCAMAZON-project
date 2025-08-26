@@ -1,5 +1,5 @@
 ---
-title: "QIU_Map_Diff_Conc_05_08_2025"
+title: "Map diff conc EDGAR 2003 2020"
 author: "Martin Colomb"
 date: "`r Sys.Date()`"
 version: "R-4.4.2"
@@ -12,10 +12,29 @@ output:
     code_folding: show
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Chargement des packages
+
+```{r packages}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(ncdf4)
+library(stringr)
+library(tibble)
+library(writexl)
+
+
+
+```
+
 ```{r chemins et fichiers}
 chem_hist_B100<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/HIST_B100"
 chem_hist<-"C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1"
-chem_QIU <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/QIU"
+chem_EDGAR <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/14_3_1/EDGAR"
 con_hg_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.SpeciesConc.2015_m.nc4"))
 statemet_B100<-nc_open(file.path(chem_hist_B100, "GEOSChem.StateMet.2015_m.nc4"))
 area<-ncvar_get(con_hg_B100, "AREA")
@@ -52,11 +71,10 @@ M_air <- 0.028964       # Masse molaire de l'air sec (kg/mol)
 ng_per_kg <- 1e12       # Conversion kg → ng
 ```
 
-
 ```{r boucle simu cartes}
 
 # Paramètres généraux
-simulations <- c("V03A03", "V20A03", "V20A20", "V03A20") # 
+simulations <- c("V03A03", "V03A20", "V20A03", "V20A20")
 lon <- seq(-180, 180, length.out = 144)
 lat <- seq(-90, 90, length.out = 91)
 df_grid <- expand.grid(x = lon, y = lat)
@@ -99,7 +117,7 @@ plot_simulation_map <- function(conc_matrix, sim_name, save_path) {
     coord_equal() +
     theme_minimal() +
     labs(
-      title = "Annual Mean Atmospheric Hg(0) Concentration in 2015",
+      title = "Annual Mean Atmospheric Hg(0) concentration in 2015",
       subtitle = paste0("Simulation : ", sim_name),
       x = "Longitude", y = "Latitude"
     ) +
@@ -128,7 +146,7 @@ plot_simulation_map <- function(conc_matrix, sim_name, save_path) {
 for (sim in simulations) {
   
   # 1. Ouvrir le fichier
-  path_sim <- file.path(chem_QIU, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
+  path_sim <- file.path(chem_EDGAR, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
   nc_sim <- nc_open(path_sim)
   
   # 2. Extraire la concentration Hg0 au niveau 1
@@ -150,7 +168,7 @@ for (sim in simulations) {
   # 6. Sauvegarde du plot
   save_path <- file.path(
     "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot",
-    paste0("QIU_", sim, "_Conc_WORLD.pdf")
+    paste0("EDGAR_", sim, "_Conc_WORLD.pdf")
   )
   
   plot_simulation_map(hg0_ng_m3, sim, save_path)
@@ -163,7 +181,7 @@ for (sim in simulations) {
 
 ```{r Map concentration Hg0 2003 V03A03}
 
-conc_V03A03 <- nc_open(file.path(chem_QIU, "V03A03/GEOSChem.SpeciesConc.2015_m.nc4"))
+conc_V03A03 <- nc_open(file.path(chem_EDGAR, "V03A03/GEOSChem.SpeciesConc.2015_m.nc4"))
 print(conc_V03A03)
 hg0_V03A03 <- ncvar_get(conc_V03A03, "SpeciesConcVV_Hg0") #mol mol-1 dry
 
@@ -235,8 +253,8 @@ plot_conc <- ggplot(df_conc, aes(x = x, y = y, fill = conc_class)) +
   coord_equal() +
   theme_minimal() +
   labs(
-    title = "Annual Mean Atmospheric Hg(0) Concentration in 2015",
-    subtitle = "Simulation : Vegetation 2003 / Emissions QIU 2003",
+    title = "Annual Mean Atmospheric Hg(0) concentration in 2015",
+    subtitle = "Simulation : Vegetation 2003 / Emissions EDGAR 2003",
     x = "Longitude", y = "Latitude"
   ) +
   borders("world", colour = "#403d39", size = 0.2) +
@@ -254,13 +272,24 @@ plot_conc <- ggplot(df_conc, aes(x = x, y = y, fill = conc_class)) +
 
 plot_conc
 
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_V03A03_Conc_WORLD.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_conc,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
 
 
 
 ```
 
 ```{r Map concentration 2020}
-conc_V20A20 <- nc_open(file.path(chem_QIU, "V20A20/GEOSChem.SpeciesConc.2015_m.nc4"))
+conc_V20A20 <- nc_open(file.path(chem_EDGAR, "V20A20/GEOSChem.SpeciesConc.2015_m.nc4"))
 print(conc_V20A20)
 hg0_V20A20 <- ncvar_get(conc_V20A20, "SpeciesConcVV_Hg0") #mol mol-1 dry
 
@@ -332,8 +361,8 @@ plot_conc <- ggplot(df_conc, aes(x = x, y = y, fill = conc_class)) +
   coord_equal() +
   theme_minimal() +
   labs(
-    title = "Annual Mean Atmospheric Hg(0) Concentration in 2015",
-    subtitle = "Simulation : Vegetation 2020 / Emissions QIU 2020",
+    title = "Annual Mean Atmospheric Hg(0) concentration in 2015",
+    subtitle = "Simulation : Vegetation 2020 / Emissions EDGAR 2020",
     x = "Longitude", y = "Latitude"
   ) +
   borders("world", colour = "#403d39", size = 0.2) +
@@ -350,6 +379,18 @@ plot_conc <- ggplot(df_conc, aes(x = x, y = y, fill = conc_class)) +
   )
 
 plot_conc
+
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_V20A20_Conc_WORLD.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_conc,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
 
 ```
 
@@ -407,7 +448,7 @@ lim <- 0.5
 plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
   geom_raster() +
   scale_fill_gradient2(
-    name = "Différence Hg(0) (ng/m³)\n2020 - 2003",
+    name = "Hg(0) difference (ng/m³)\n2020 - 2003",
     low = colors_div[1],
     mid = colors_div[2],
     high = colors_div[3],
@@ -418,8 +459,8 @@ plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
   coord_equal() +
   theme_minimal() +
   labs(
-    title = paste0("Average annual difference of Hg(0) between 2020 and 2003"),
-        subtitle = "Dataset : QIU",
+    title = paste0("Average annual difference of Hg(0) concentration between 2020 and 2003"),
+        subtitle = "Dataset : EDGAR",
     x = "Longitude", y = "Latitude"
   ) +
   borders("world", colour = "#403d39", size = 0.2) +
@@ -438,7 +479,7 @@ plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
 plot_diff_zoom
 
 # Chemin de sauvegarde (modifie si nécessaire)
-chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/QIU_diff_20_03_Conc_WORLD.pdf"
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_diff_20_03_Conc_WORLD.pdf"
 
 # Enregistrement du plot
 ggsave(
@@ -449,6 +490,104 @@ ggsave(
 )
 
 ```
+
+
+<!-- ```{r diff EMI 2003 2020 WORLD} -->
+
+<!-- range(V20A20_ng_m3) -->
+<!-- range(V03A03_ng_m3) -->
+
+<!-- diff03_20<- V20A20_ng_m3 - V03A03_ng_m3 #ng/m3 -->
+
+<!-- range(diff03_20) -->
+
+<!-- lon <- seq(-180, 180, length.out = 144) -->
+<!-- lat <- seq(-90, 90, length.out = 91) -->
+<!-- df_diff <- expand.grid(x = lon, y = lat) -->
+<!-- df_diff$diff_conc <- as.vector(diff03_20) -->
+
+<!-- df_diff <- na.omit(df_diff) -->
+<!-- colors_div <- c("#2166AC", "#FFFFFF", "#B2182B")  # bleu - blanc - rouge -->
+
+<!-- plot_diff <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_gradient2( -->
+<!--     name = "Différence Hg(0) (ng/m³)\n2020 - 2003", -->
+<!--     low = colors_div[1], -->
+<!--     mid = colors_div[2], -->
+<!--     high = colors_div[3], -->
+<!--     midpoint = 0, -->
+<!--     limits = c(-max(abs(df_diff$diff_conc)), max(abs(df_diff$diff_conc))), -->
+<!--     oob = scales::squish -->
+<!--   ) + -->
+<!--   coord_equal() + -->
+<!--   theme_minimal() + -->
+<!--   labs( -->
+<!--     title = "Différence annuelle moyenne Hg(0) atmosphérique (2020 - 2003)", -->
+<!--     x = "Longitude", y = "Latitude" -->
+<!--   ) + -->
+<!--   borders("world", colour = "#403d39", size = 0.2) + -->
+<!--   theme( -->
+<!--     plot.title = element_text(hjust = 0.5, face = "bold"), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.ticks = element_line(color = "black", size = 0.3), -->
+<!--     axis.ticks.length = unit(3, "pt"), -->
+<!--     panel.grid = element_blank(), -->
+<!--     panel.border = element_rect(color = "black", fill = NA, size = 0.8), -->
+<!--     axis.line = element_blank(), -->
+<!--     plot.background = element_rect(fill = "white", color = NA) -->
+<!--   ) -->
+
+<!-- plot_diff -->
+
+
+
+<!-- lim <- 0.5 -->
+<!-- plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_gradient2( -->
+<!--     name = "Hg(0) difference (ng/m³)\n2020 - 2003", -->
+<!--     low = colors_div[1], -->
+<!--     mid = colors_div[2], -->
+<!--     high = colors_div[3], -->
+<!--     midpoint = 0, -->
+<!--     limits = c(-lim, lim), -->
+<!--     oob = scales::squish -->
+<!--   ) + -->
+<!--   coord_equal() + -->
+<!--   theme_minimal() + -->
+<!--   labs( -->
+<!--     title = paste0("Average annual difference of Hg(0) concentration between 2020 and 2003"), -->
+<!--         subtitle = "Dataset : EDGAR", -->
+<!--     x = "Longitude", y = "Latitude" -->
+<!--   ) + -->
+<!--   borders("world", colour = "#403d39", size = 0.2) + -->
+<!--    theme( -->
+<!--     plot.title = element_text(hjust = 0.5, face = "bold"), -->
+<!--     plot.subtitle = element_text(hjust = 0.5), -->
+<!--     axis.text = element_text(size = 10), -->
+<!--     axis.ticks = element_line(color = "black", size = 0.3), -->
+<!--     axis.ticks.length = unit(3, "pt"), -->
+<!--     panel.grid = element_blank(), -->
+<!--     panel.border = element_rect(color = "black", fill = NA, size = 0.8), -->
+<!--     axis.line = element_blank(), -->
+<!--     plot.background = element_rect(fill = "white", color = NA) -->
+<!--   ) -->
+
+<!-- plot_diff_zoom -->
+
+<!-- # Chemin de sauvegarde (modifie si nécessaire) -->
+<!-- chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_diff_20_03_Conc_WORLD.pdf" -->
+
+<!-- # Enregistrement du plot -->
+<!-- ggsave( -->
+<!--   filename = chemin_pdf, -->
+<!--   plot = plot_diff_zoom, -->
+<!--   device = "pdf", -->
+<!--   width = 10, height = 6, units = "in" -->
+<!-- ) -->
+
+<!-- ``` -->
 
 ```{r Amazon mask}
 
@@ -462,6 +601,32 @@ df_amazon <- expand.grid(
   y = lat   # tes latitudes
 ) %>%
   mutate(mask = as.vector(Am_mask))
+
+# Affichage de la carte
+ggplot(df_amazon, aes(x = x, y = y, fill = factor(mask))) +
+  geom_raster() +
+  scale_fill_manual(
+    values = c("0" = "transparent", "1" = "#0077BB"),
+    labels = c("0" = "Non-Amazonie", "1" = "Amazonie"),
+    name = "Masque Amazonie"
+  ) +
+  borders("world", colour = "black", size = 0.3) +
+  coord_equal() +
+  theme_minimal() +
+  labs(
+    title = "Masque Amazonien",
+    x = "Longitude", y = "Latitude"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.position = "right",
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.6),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+
+
 
 
 plot_mask<-ggplot(df_amazon, aes(x = x, y = y, fill = factor(mask))) +
@@ -489,6 +654,17 @@ plot_mask<-ggplot(df_amazon, aes(x = x, y = y, fill = factor(mask))) +
   )
 print(plot_mask)
 
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/Amazon_mask.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = plot_mask,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
 
 ```
 
@@ -511,8 +687,8 @@ plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
 
   theme_minimal() +
   labs(
-    title = paste0("Average annual difference of Hg(0) between 2020 and 2003"),
-        subtitle = "Dataset : QIU - Latin America focus",
+    title = paste0("Average annual difference of Hg(0) concentration between 2020 and 2003"),
+        subtitle = "Dataset : EDGAR - Latin America focus",
     x = "Longitude", y = "Latitude"
   ) +
   borders("world", colour = "#403d39", size = 0.2) +
@@ -531,7 +707,7 @@ plot_diff_zoom <- ggplot(df_diff, aes(x = x, y = y, fill = diff_conc)) +
 plot_diff_zoom
 
 # Chemin de sauvegarde (modifie si nécessaire)
-chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/QIU_Mean_annual_difference_amazonia.pdf"
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_Mean_annual_difference_amazonia.pdf"
 
 # Enregistrement du plot
 ggsave(
@@ -544,7 +720,7 @@ ggsave(
 
 ```
 
-```{r calcul contrib vegetation}
+```{r calcul contrib vegetation amazo}
 simulations <- c("V03A03", "V03A20", "V20A03", "V20A20")
 
 results_amz <- list()
@@ -552,7 +728,7 @@ results_amz <- list()
 for (sim in simulations) {
   
   # 1. Ouvrir le fichier NetCDF
-  path_sim <- file.path(chem_QIU, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
+  path_sim <- file.path(chem_EDGAR, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
   nc_sim <- nc_open(path_sim)
   
   # 2. Lire la variable Hg0 (niveau 1)
@@ -616,7 +792,7 @@ total_sum <- total_A + total_V
 
 contrib <- c(
   Emissions = 100 * total_A / total_sum,
-  Végétation  = 100 * total_V / total_sum
+  Vegetation  = 100 * total_V / total_sum
 )
 
 
@@ -628,7 +804,7 @@ df <- data.frame(
 
 df$label <- paste0(df$source, "\n", sprintf("%.1f", df$pct), "%")
 
-contrib_conc<-ggplot(df, aes(x = "", y = pct, fill = source)) +
+contrib_conc_ama<-ggplot(df, aes(x = "", y = pct, fill = source)) +
   geom_col(width = 1, color = "white") +
   geom_text(aes(label = label), 
             position = position_stack(vjust = 0.5), 
@@ -637,7 +813,7 @@ contrib_conc<-ggplot(df, aes(x = "", y = pct, fill = source)) +
   scale_fill_manual(values = c("#D95F02", "#1B9E77")) +
   labs(
     title = "Relative contribution to the change in Hg(0) concentration",
-    subtitle = "Dataset : QIU / Amazonia forest focus",
+    subtitle = "Dataset : EDGAR / Amazonia forest focus",
     fill = "Source"
   ) +
   theme_void() +
@@ -651,14 +827,14 @@ contrib_conc<-ggplot(df, aes(x = "", y = pct, fill = source)) +
     panel.border = element_rect(color = "black", fill = NA, size = 0.8),
     plot.background = element_rect(fill = "white", color = NA)
   )
-print(contrib_conc)
+print(contrib_conc_ama)
 # Chemin de sauvegarde (modifie si nécessaire)
-chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/QIU_Contrib_Conc.pdf"
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_Contrib_Conc_Amazonia.pdf"
 
 # Enregistrement du plot
 ggsave(
   filename = chemin_pdf,
-  plot = contrib_conc,
+  plot = contrib_conc_ama,
   device = "pdf",
   width = 10, height = 6, units = "in"
 )
@@ -667,21 +843,136 @@ ggsave(
 ```
 
 
+```{r calcul contrib vegetation total}
+simulations <- c("V03A03", "V03A20", "V20A03", "V20A20")
+
+results <- list()
+
+for (sim in simulations) {
+  
+  # 1. Ouvrir le fichier NetCDF
+  path_sim <- file.path(chem_EDGAR, sim, "GEOSChem.SpeciesConc.2015_m.nc4")
+  nc_sim <- nc_open(path_sim)
+  
+  # 2. Lire la variable Hg0 (niveau 1)
+  hg0 <- ncvar_get(nc_sim, "SpeciesConcVV_Hg0")[, , 1, ]
+  
+  # 3. Gérer le temps et pondérer
+  time_raw <- ncvar_get(nc_sim, "time")
+  origin_time <- as.POSIXct("2015-01-01 00:00:00", tz = "UTC")
+  time <- origin_time + time_raw * 60
+  weights <- days_in_month(time) / sum(days_in_month(time))
+  
+  # 4. Moyenne pondérée temporelle
+  weighted_avg <- function(x) sum(x * weights)
+  hg0_mean <- apply(hg0, MARGIN = c(1, 2), FUN = weighted_avg)
+  
+  # 5. Conversion en ng/m³
+  hg0_ng_m3 <- hg0_mean * (M_Hg / M_air) * mean_Met_AIRDEN * ng_per_kg
+  
+ 
+  hg0 <- hg0_ng_m3
+  
+  # 7. Stocker le résultat
+  results[[sim]] <- hg0
+  
+  # Fermer le fichier
+  nc_close(nc_sim)
+}
+
+# Résultat : une liste results_amz avec 4 objets nommés :
+# results_amz$V03A03, results_amz$V03A20, etc.
+V03A03 <- results[["V03A03"]]
+V03A20 <- results[["V03A20"]]
+V20A03 <- results[["V20A03"]]
+V20A20 <- results[["V20A20"]]
+
+range(V03A03)
+mean(V03A03)
+sd(V03A03)
+range(V03A20)
+range(V20A03)
+range(V20A20)
+mean(V20A20)
+sd(V20A20)
+
+#1. Décomposition spatiale : SCREEN DANS DOCS GEOSCHEM
+Eff_A <- 0.5 * ((V03A20 - V03A03) + (V20A20 - V20A03))
+Eff_V <- 0.5 * ((V20A03 - V03A03) + (V20A20 - V03A20))
+Interaction <- V20A20 - V03A03 - Eff_A - Eff_V
+
+
+
+#3. Moyennes régionales :
+mean_A <- mean(Eff_A, na.rm = TRUE)
+mean_V <- mean(Eff_V, na.rm = TRUE)
+mean_I <- mean(Interaction, na.rm = TRUE)
+
+#4. Camembert avec interaction répartie :
+total_A <- mean_A + 0.5 * mean_I
+total_V <- mean_V + 0.5 * mean_I
+total_sum <- total_A + total_V
+
+contrib <- c(
+  Emissions = 100 * total_A / total_sum,
+  Vegetation  = 100 * total_V / total_sum
+)
+
+
+
+df <- data.frame(
+  source = names(contrib),
+  pct = contrib
+)
+
+df$label <- paste0(df$source, "\n", sprintf("%.1f", df$pct), "%")
+
+contrib_conc_tot<-ggplot(df, aes(x = "", y = pct, fill = source)) +
+  geom_col(width = 1, color = "white") +
+  geom_text(aes(label = label), 
+            position = position_stack(vjust = 0.5), 
+            color = "white", size = 5, fontface = "bold") +
+  coord_polar("y") +
+  scale_fill_manual(values = c("#D95F02", "#1B9E77")) +
+  labs(
+    title = "Relative contribution to the change in Hg(0) concentration",
+    subtitle = "Dataset : EDGAR / Global",
+    fill = "Source"
+  ) +
+  theme_void() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5),
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, size = 0.8),
+    plot.background = element_rect(fill = "white", color = NA)
+  )
+print(contrib_conc_tot)
+# Chemin de sauvegarde (modifie si nécessaire)
+chemin_pdf <- "C:/Users/colom/Desktop/STAGE/data/clean_mod_data/plot/EDGAR_Contrib_Conc_GLOBAL.pdf"
+
+# Enregistrement du plot
+ggsave(
+  filename = chemin_pdf,
+  plot = contrib_conc_tot,
+  device = "pdf",
+  width = 10, height = 6, units = "in"
+)
+
+
+```
+
+```{r contrib vegetation total 2 plots}
+
+plots <- contrib_conc_tot + contrib_conc_ama +   plot_layout(ncol = 2)
+plots  
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+```
